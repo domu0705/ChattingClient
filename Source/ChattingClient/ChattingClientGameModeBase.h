@@ -19,8 +19,8 @@ public:
 		void ChangeMenuWidget(TSubclassOf<UUserWidget> NewWidgetClass);
 
 protected:
+	virtual void StartPlay() override;
 	virtual void BeginPlay() override;//이벤트 함수
-
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UMG_Game")
 		TSubclassOf<UUserWidget> StartingWidgetClass;//게임이 시작될 때 표시될 위젯을 저장

@@ -2,7 +2,20 @@
 
 
 #include "ChattingClientGameModeBase.h"
+#include "ChattingClientGameInstance.h"
 #include <Blueprint/UserWidget.h>
+
+//플레이가 시작되었을 때, 게임 모드에서 액터들의 BeginPlay() 함수를 호출하는 역할.
+void AChattingClientGameModeBase::StartPlay()
+{
+	Super::StartPlay();
+
+	auto gameInstance = GetWorld()->GetGameInstance();
+	UChattingClientGameInstance* GameInstance = Cast<UChattingClientGameInstance>(gameInstance);
+
+	//SocketManager = new USocketManager();
+	//GameInstanceRef->SetPacketManager(SocketManager);
+}
 
 void AChattingClientGameModeBase::BeginPlay()
 {
@@ -34,3 +47,4 @@ void AChattingClientGameModeBase::ChangeMenuWidget(TSubclassOf<UUserWidget> NewW
 			CurrentWidget->AddToViewport();
 		}
 	}
+}
