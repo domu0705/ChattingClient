@@ -21,7 +21,7 @@ void AChattingClientGameModeBase::BeginPlay()
 {
 	Super::BeginPlay();//내가 구현할 함수는 기존 절차의 끝부분에 한단계를 추가하기 위한 것이므로 super::BeginPlay함수를 맨처음에 호출.
 	//PlayerControllerClass = AClientPlayerController::StaticClass();
-	ChangeMenuWidget(StartingWidgetClass);//게임 시작시 UI를 표시함
+	//ChangeMenuWidget(StartingWidgetClass);//게임 시작시 UI를 표시함
 
 	//FString testString = TEXT("한글 테스트 완료");
 
@@ -31,7 +31,7 @@ void AChattingClientGameModeBase::BeginPlay()
 
 }
 
-
+/*
 void AChattingClientGameModeBase::ChangeMenuWidget(TSubclassOf<UUserWidget> NewWidgetClass)
 {
 	if (CurrentWidget != nullptr)//먼저 현재 위젯이 비어있는지 검사
@@ -47,4 +47,4 @@ void AChattingClientGameModeBase::ChangeMenuWidget(TSubclassOf<UUserWidget> NewW
 			CurrentWidget->AddToViewport();
 		}
 	}
-}
+}*/
