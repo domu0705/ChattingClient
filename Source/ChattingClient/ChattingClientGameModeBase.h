@@ -7,7 +7,7 @@
 #include "ChattingClientGameModeBase.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class CHATTINGCLIENT_API AChattingClientGameModeBase : public AGameModeBase
@@ -15,20 +15,20 @@ class CHATTINGCLIENT_API AChattingClientGameModeBase : public AGameModeBase
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable, Category = "UMG_Game") //UFunction ¸ŞÅ©·Î¸¦ ÅëÇØ ÀÌ ÇÔ¼ö¸¦ ºí·çÇÁ¸°Æ®¿¡¼­ È£ÃâÇÒ ¼ö ÀÖµµ·Ï ÇÔ
+	UFUNCTION(BlueprintCallable, Category = "UMG_Game") //UFunction ë©”í¬ë¡œë¥¼ í†µí•´ ì´ í•¨ìˆ˜ë¥¼ ë¸”ë£¨í”„ë¦°íŠ¸ì—ì„œ í˜¸ì¶œí•  ìˆ˜ ìˆë„ë¡ í•¨
 		void ChangeMenuWidget(TSubclassOf<UUserWidget> NewWidgetClass);
 
 protected:
-	virtual void BeginPlay() override;//ÀÌº¥Æ® ÇÔ¼ö
+	virtual void BeginPlay() override;//ì´ë²¤íŠ¸ í•¨ìˆ˜
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UMG_Game")
-		TSubclassOf<UUserWidget> StartingWidgetClass;//°ÔÀÓÀÌ ½ÃÀÛµÉ ¶§ Ç¥½ÃµÉ À§Á¬À» ÀúÀå
-	//TSubclassOf Å¸ÀÔÀº UE¿¡¼­ UClass Å¸ÀÔ ¾ÈÁ¤¼ºÀ» º¸ÀåÇÏ´Â ÅÛÇÃ¸´ Å¬·¡½ºÀÓ
-	//TSubclassOf ¿¡ Àü´ŞµÈ ´ë»óÀÌ <> ¾È¿¡ ³Ö¾îÁØ ÅÛÇÃ¸´ ÀÎÀÚ Å¸ÀÔ°ú ÀÏÄ¡ÇÏ°Å³ª,
-	//ÅÛÇÃ¸´ ÀÎÀÚ·Î ¹ŞÀº Å¸ÀÔÀ» »ó¼Ó¹ŞÀº Å¸ÀÔÀÎÁö¸¦ ·±Å¸ÀÓ Áß¿¡ È®ÀÎÇÏµµ·Ï µ½´Â Å¬·¡½ºÀÓ
+		TSubclassOf<UUserWidget> StartingWidgetClass;//ê²Œì„ì´ ì‹œì‘ë  ë•Œ í‘œì‹œë  ìœ„ì ¯ì„ ì €ì¥
+	//TSubclassOf íƒ€ì…ì€ UEì—ì„œ UClass íƒ€ì… ì•ˆì •ì„±ì„ ë³´ì¥í•˜ëŠ” í…œí”Œë¦¿ í´ë˜ìŠ¤ì„
+	//TSubclassOf ì— ì „ë‹¬ëœ ëŒ€ìƒì´ <> ì•ˆì— ë„£ì–´ì¤€ í…œí”Œë¦¿ ì¸ì íƒ€ì…ê³¼ ì¼ì¹˜í•˜ê±°ë‚˜,
+	//í…œí”Œë¦¿ ì¸ìë¡œ ë°›ì€ íƒ€ì…ì„ ìƒì†ë°›ì€ íƒ€ì…ì¸ì§€ë¥¼ ëŸ°íƒ€ì„ ì¤‘ì— í™•ì¸í•˜ë„ë¡ ë•ëŠ” í´ë˜ìŠ¤ì„
 
 	UPROPERTY()
-		UUserWidget* CurrentWidget;//ÇöÀç È­¸é¿¡ Ç¥½ÃµÇ°í ÀÖ´Â UI À§Á¬À» ÀúÀå¤·ÇÒ Æ÷ÀÎÅÍÅ¸ÀÔÀÇ º¯¼ö
+		UUserWidget* CurrentWidget;//í˜„ì¬ í™”ë©´ì— í‘œì‹œë˜ê³  ìˆëŠ” UI ìœ„ì ¯ì„ ì €ì¥ã…‡í•  í¬ì¸í„°íƒ€ì…ì˜ ë³€ìˆ˜
 
 };

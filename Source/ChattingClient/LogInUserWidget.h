@@ -20,14 +20,14 @@ public:
 	void NativeConstruct() override;
 
 	UPROPERTY(meta = (BindWidget))
-		UButton* Btn_LogIn = nullptr;
+		UButton* LogInBtn = nullptr;
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-		UEditableTextBox* ETxt_Id; // 아이템 목록1 구매 개수 입력 
+		UEditableTextBox* IDEditText;
 
 	void SetLoginUI();
 
 protected:
 
 	UFUNCTION()
-		void Btn_LogIn_Func(); // 인벤토리 닫기 버튼 누를 시 호출 될 함수
+		void LogInBtnClicked(); 
 };

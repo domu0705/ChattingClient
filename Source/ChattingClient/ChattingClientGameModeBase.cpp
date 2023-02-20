@@ -6,32 +6,31 @@
 
 void AChattingClientGameModeBase::BeginPlay()
 {
-	Super::BeginPlay();//³»°¡ ±¸ÇöÇÒ ÇÔ¼ö´Â ±âÁ¸ ÀıÂ÷ÀÇ ³¡ºÎºĞ¿¡ ÇÑ´Ü°è¸¦ Ãß°¡ÇÏ±â À§ÇÑ °ÍÀÌ¹Ç·Î super::BeginPlayÇÔ¼ö¸¦ ¸ÇÃ³À½¿¡ È£Ãâ.
+	Super::BeginPlay();//ë‚´ê°€ êµ¬í˜„í•  í•¨ìˆ˜ëŠ” ê¸°ì¡´ ì ˆì°¨ì˜ ëë¶€ë¶„ì— í•œë‹¨ê³„ë¥¼ ì¶”ê°€í•˜ê¸° ìœ„í•œ ê²ƒì´ë¯€ë¡œ super::BeginPlayí•¨ìˆ˜ë¥¼ ë§¨ì²˜ìŒì— í˜¸ì¶œ.
 	//PlayerControllerClass = AClientPlayerController::StaticClass();
-	ChangeMenuWidget(StartingWidgetClass);//°ÔÀÓ ½ÃÀÛ½Ã UI¸¦ Ç¥½ÃÇÔ
-	
-	//FString testString = TEXT("ÇÑ±Û Å×½ºÆ® ¿Ï·á");
+	ChangeMenuWidget(StartingWidgetClass);//ê²Œì„ ì‹œì‘ì‹œ UIë¥¼ í‘œì‹œí•¨
+
+	//FString testString = TEXT("í•œê¸€ í…ŒìŠ¤íŠ¸ ì™„ë£Œ");
 
 	//UE_LOG(LogTemp, Warning, TEXT("%s"), *testString);
 
-	//UE_LOG(LogTemp, Log, TEXT("BeginPlay ½ÃÀÛµÊ@@@@@@@@@@@@@@"));
+	//UE_LOG(LogTemp, Log, TEXT("BeginPlay ì‹œì‘ë¨@@@@@@@@@@@@@@"));
 
 }
 
 
 void AChattingClientGameModeBase::ChangeMenuWidget(TSubclassOf<UUserWidget> NewWidgetClass)
 {
-	if (CurrentWidget != nullptr)//¸ÕÀú ÇöÀç À§Á¬ÀÌ ºñ¾îÀÖ´ÂÁö °Ë»ç
+	if (CurrentWidget != nullptr)//ë¨¼ì € í˜„ì¬ ìœ„ì ¯ì´ ë¹„ì–´ìˆëŠ”ì§€ ê²€ì‚¬
 	{
-		CurrentWidget->RemoveFromViewport();//È­¸é¿¡¼­ UIÁ¦°Å
+		CurrentWidget->RemoveFromViewport();//í™”ë©´ì—ì„œ UIì œê±°
 		CurrentWidget = nullptr;
 	}
-	if (NewWidgetClass != nullptr)//¸Å°³º¯¼ö·Î ¹ŞÀº NewWidgetClass°¡ À¯È¿ÇÑÁö °Ë»ç
+	if (NewWidgetClass != nullptr)//ë§¤ê°œë³€ìˆ˜ë¡œ ë°›ì€ NewWidgetClassê°€ ìœ íš¨í•œì§€ ê²€ì‚¬
 	{
-		CurrentWidget = CreateWidget(GetWorld(), NewWidgetClass);//CreateWidget()·Î »õÀ§Á¬À» ¸¸µé¾î currentWidget¿¡ ÀúÀåÇÑ µÚ ºäÆ÷Æ®¿¡ Ç¥½ÃÇÏµµ·Ï ¸¸µê
+		CurrentWidget = CreateWidget(GetWorld(), NewWidgetClass);//CreateWidget()ë¡œ ìƒˆìœ„ì ¯ì„ ë§Œë“¤ì–´ currentWidgetì— ì €ì¥í•œ ë’¤ ë·°í¬íŠ¸ì— í‘œì‹œí•˜ë„ë¡ ë§Œë“¦
 		if (CurrentWidget != nullptr)
 		{
 			CurrentWidget->AddToViewport();
 		}
 	}
-}

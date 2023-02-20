@@ -3,15 +3,18 @@
 
 #include "LogInUserWidget.h"
 
-//À§Á¬ Å¬·¡½ºÀÇ ¼Ä¼ºÀÚ
+//ìœ„ì ¯ í´ëž˜ìŠ¤ì˜ ì…ì„±ìž
 void ULogInUserWidget::NativeConstruct()
 {
+	UE_LOG(LogTemp, Log, TEXT("NativeConstruct ï¿½ï¿½ï¿½Ûµï¿½@@@@@@@@@@@@@@"));
 	Super::NativeConstruct();
 
-	if (Btn_LogIn)
+	if (LogInBtn)
 	{
-		Btn_LogIn->OnClicked.AddDynamic(this, &ULogInUserWidget::Btn_LogIn_Func);
+		LogInBtn->OnClicked.AddDynamic(this, &ULogInUserWidget::LogInBtnClicked);
 	}
+
+	//SetLoginText();
 	//if (Btn_LogIn)
 	//{
 	//	Btn_LogIn->OnClicked.AddDynamic(this, &ULogIn_UserWidget::Btn_LogIn_Func);
@@ -21,16 +24,16 @@ void ULogInUserWidget::NativeConstruct()
 
 void ULogInUserWidget::SetLoginUI()
 {
-	//EditText_LogIn->SetHintText(FText::FromString(L"hihihi!"));//´Ð³×ÀÓÀ» ÀÔ·ÂÇÏ¼¼¿ä
+	//EditText_LogIn->SetHintText(FText::FromString(L"hihihi!"));/
 
 }
 
 
-void ULogInUserWidget::Btn_LogIn_Func()
+void ULogInUserWidget::LogInBtnClicked()
 {
-	FString tempStr = (ETxt_Id->GetText()).ToString();
+	UE_LOG(LogTemp, Log, TEXT("ë²„íŠ¼ ì‹œìž‘@@@@@@@@@@@@@@"));
+	FString tempStr = (IDEditText->GetText()).ToString();
 	int32 tempCnt = FCString::Atoi(*tempStr);
-	UE_LOG(LogTemp, Log, TEXT("BeginPlay ½ÃÀÛµÊ@@@@@@@@@@@@@@"));
 	/*if (tempCnt > 0)
 	{
 		NPCBot->BuyItem1(tempCnt);
