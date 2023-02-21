@@ -34,6 +34,8 @@ void ULogInUserWidget::LogInBtnClicked()
 	UE_LOG(LogTemp, Log, TEXT("버튼 시작@@@@@@@@@@@@@@"));
 	FString tempStr = (IDEditText->GetText()).ToString();
 	int32 tempCnt = FCString::Atoi(*tempStr);
+
+
 	/*if (tempCnt > 0)
 	{
 		NPCBot->BuyItem1(tempCnt);

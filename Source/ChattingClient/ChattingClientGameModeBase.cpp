@@ -9,12 +9,6 @@
 void AChattingClientGameModeBase::StartPlay()
 {
 	Super::StartPlay();
-
-	auto gameInstance = GetWorld()->GetGameInstance();
-	UChattingClientGameInstance* GameInstance = Cast<UChattingClientGameInstance>(gameInstance);
-
-	//SocketManager = new USocketManager();
-	//GameInstanceRef->SetPacketManager(SocketManager);
 }
 
 void AChattingClientGameModeBase::BeginPlay()
@@ -29,22 +23,10 @@ void AChattingClientGameModeBase::BeginPlay()
 
 	//UE_LOG(LogTemp, Log, TEXT("BeginPlay 시작됨@@@@@@@@@@@@@@"));
 
+	auto gameInstance = GetWorld()->GetGameInstance();
+	UChattingClientGameInstance* GameInstance = Cast<UChattingClientGameInstance>(gameInstance);
+	userWidgetManager = new UUserWidgetManager(); //CreateDefaultSubobject<UUserWidgetManager>(TEXT("userWidgetManager"))
+	userWidgetManager->CreateLogInView( GetWorld() );
+
 }
 
-/*
-void AChattingClientGameModeBase::ChangeMenuWidget(TSubclassOf<UUserWidget> NewWidgetClass)
-{
-	if (CurrentWidget != nullptr)//먼저 현재 위젯이 비어있는지 검사
-	{
-		CurrentWidget->RemoveFromViewport();//화면에서 UI제거
-		CurrentWidget = nullptr;
-	}
-	if (NewWidgetClass != nullptr)//매개변수로 받은 NewWidgetClass가 유효한지 검사
-	{
-		CurrentWidget = CreateWidget(GetWorld(), NewWidgetClass);//CreateWidget()로 새위젯을 만들어 currentWidget에 저장한 뒤 뷰포트에 표시하도록 만듦
-		if (CurrentWidget != nullptr)
-		{
-			CurrentWidget->AddToViewport();
-		}
-	}
-}*/

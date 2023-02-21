@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "UserWidgetManager.h"
 #include "ChattingClientGameModeBase.generated.h"
 
 /**
@@ -30,5 +31,7 @@ protected:
 
 	UPROPERTY()
 		UUserWidget* CurrentWidget;//현재 화면에 표시되고 있는 UI 위젯을 저장ㅇ할 포인터타입의 변수
+
+	UUserWidgetManager* userWidgetManager;
 
 };

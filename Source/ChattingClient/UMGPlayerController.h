@@ -20,6 +20,6 @@ public:
 
 private:
 
-	TSubclassOf<ULogInUserWidget> LoginUIClass;
-	ULogInUserWidget* LoginUIObject;
+	//TSubclassOf<ULogInUserWidget> LoginUIClass;
+	//ULogInUserWidget* LoginUIObject;
 };

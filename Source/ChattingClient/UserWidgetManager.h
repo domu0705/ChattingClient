@@ -4,14 +4,23 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "UserWidgetManager.generated.h"
+#include "LogInUserWidget.h"
 
 /**
  * 
  */
-UCLASS()
-class CHATTINGCLIENT_API UUserWidgetManager : public UUserWidget
+class UUserWidgetManager
 {
-	GENERATED_BODY()
-	
+	//virtual void NativeConstruct() override;
+public:
+	UUserWidgetManager();
+	void StartUserWidgetManager();
+	void CreateLogInView(UWorld* world);
+	//void CreateUserWidgetClass();
+	//virtual void BeginPlay() override; 여기 이거 못씀
+
+private:
+
+	TSubclassOf<UUserWidget> LoginUIClass;
+	UUserWidget* LoginUIObject;
 };
