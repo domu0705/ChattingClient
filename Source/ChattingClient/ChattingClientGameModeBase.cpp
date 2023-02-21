@@ -31,7 +31,7 @@ void AChattingClientGameModeBase::BeginPlay()
 
 	UserWidgetManager = new UUserWidgetManager(); //CreateDefaultSubobject<UUserWidgetManager>(TEXT("userWidgetManager"))
 	UserWidgetManager->CreateLogInView( GetWorld() );
-
+	UserWidgetManager->CreateLobbyView(GetWorld());
 }
 
 //endplay에서 UUserWidgetManager delete

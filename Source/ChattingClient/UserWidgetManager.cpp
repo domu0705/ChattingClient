@@ -29,8 +29,6 @@ void UUserWidgetManager::CreateLogInView(UWorld* world)
 	if (!world)
 		return;
 
-	UE_LOG(LogTemp, Log, TEXT("CreateLogInView@@@@@"));
-
 	FString path = "/Game/BP_Login";
 	LoginUIClass = ConstructorHelpersInternal::FindOrLoadClass(path, ULogInUserWidget::StaticClass());
 	if (!LoginUIClass)
@@ -42,13 +40,7 @@ void UUserWidgetManager::CreateLogInView(UWorld* world)
 	if (LoginUIObject)
 	{
 		LoginUIObject->AddToViewport();
-		UE_LOG(LogTemp, Log, TEXT("LoginUIObject success @@@@@@@@@@@@@@"));
 	}
-	else
-	{
-		UE_LOG(LogTemp, Log, TEXT("LoginUIObject fail @@@@@"));
-	}
-
 }
 
 void UUserWidgetManager::CreateLobbyView(UWorld* world)
@@ -56,24 +48,57 @@ void UUserWidgetManager::CreateLobbyView(UWorld* world)
 	if (!world)
 		return;
 
-	UE_LOG(LogTemp, Log, TEXT("CreateLobbyView@@@@@"));
+	UE_LOG(LogTemp, Log, TEXT("@@@ CreateLobbyView"));
 
 	FString path = "/Game/BP_Lobby";
-	LoginUIClass = ConstructorHelpersInternal::FindOrLoadClass(path, ULogInUserWidget::StaticClass());
-	if (!LoginUIClass)
+	LobbyUIClass = ConstructorHelpersInternal::FindOrLoadClass(path, ULobbyUserWidget::StaticClass());
+	if (!LobbyUIClass)
 		return;
 
-	auto asd = CreateWidget<UUserWidget>(world, LoginUIClass);
-
-	LoginUIObject = Cast<ULogInUserWidget>(asd);
-	if (LoginUIObject)
+	LobbyUIObject = Cast<ULobbyUserWidget>(CreateWidget<UUserWidget>(world, LobbyUIClass));
+	if (LobbyUIObject)
 	{
-		LoginUIObject->AddToViewport();
-		UE_LOG(LogTemp, Log, TEXT("LoginUIObject success @@@@@@@@@@@@@@"));
+		LobbyUIObject->AddToViewport();
+		OnOffLobbyView(false);
+		UE_LOG(LogTemp, Log, TEXT("@@@ LobbyUIObject success"));
 	}
 	else
 	{
-		UE_LOG(LogTemp, Log, TEXT("LoginUIObject fail @@@@@"));
+		UE_LOG(LogTemp, Log, TEXT("@@@ LobbyUIObject  fail "));
+	}
+}
+
+void UUserWidgetManager::OnOffLogInView(bool isVIsible)
+{
+	if (!LoginUIObject)
+		return;
+
+	if (isVIsible)
+	{
+		LoginUIObject->SetVisibility(ESlateVisibility::Visible);
+	}
+	else
+	{
+		LoginUIObject->SetVisibility(ESlateVisibility::Collapsed);
+	}
+}
+
+void UUserWidgetManager::OnOffLobbyView(bool isVIsible)
+{
+	UE_LOG(LogTemp, Log, TEXT("@@@ OnOffLobbyView"));
+	if (!LobbyUIObject) {
+		UE_LOG(LogTemp, Log, TEXT("@@@ OnOffLobbyView | LobbyUIObject nulllll"));
+		return;
 	}
 
+	if (isVIsible)
+	{
+		UE_LOG(LogTemp, Log, TEXT("@@@ OnOffLobbyView | true"));
+		LobbyUIObject->SetVisibility(ESlateVisibility::Visible);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Log, TEXT("@@@ OnOffLobbyView | false"));
+		LobbyUIObject->SetVisibility(ESlateVisibility::Collapsed);
+	}
 }

@@ -6,25 +6,44 @@
 //위젯 클래스의 셍성자
 void ULogInUserWidget::NativeConstruct()
 {
-	UE_LOG(LogTemp, Log, TEXT("NativeConstruct ���۵�@@@@@@@@@@@@@@"));
 	Super::NativeConstruct();
+	UE_LOG(LogTemp, Log, TEXT("NativeConstruct ���۵�@@@@@@@@@@@@@@"));
+
+	UserWidgetManager = UUserWidgetManager::GetInstance();
 
 	if (LogInBtn)
 	{
 		LogInBtn->OnClicked.AddDynamic(this, &ULogInUserWidget::LogInBtnClicked);
+		LogInBtn->SetVisibility(ESlateVisibility::Collapsed);
 	}
 
-	//SetLoginText();
-	//if (Btn_LogIn)
-	//{
-	//	Btn_LogIn->OnClicked.AddDynamic(this, &ULogIn_UserWidget::Btn_LogIn_Func);
-	//}
+	if (PortBtn)
+	{
+		PortBtn->OnClicked.AddDynamic(this, &ULogInUserWidget::PortConnBtnClicked);
+	}
 }
 
 void ULogInUserWidget::SetLoginUI()
 {
 	//EditText_LogIn->SetHintText(FText::FromString(L"hihihi!"));/
 
+}
+
+void ULogInUserWidget::PortConnBtnClicked()
+{
+	//UChattingClientManager* manager = UChattingClientManager::GetInstance();
+	USocketManager* socketManager = USocketManager::GetInstance();//manager->GetSocket();
+
+	if (socketManager->ConnectServer())
+	{
+		UE_LOG(LogTemp, Log, TEXT("@@@PortConnBtnClicked::ConnectServer success"));
+		PortBtn->SetVisibility(ESlateVisibility::Collapsed);//Collapsed  Hidden
+		LogInBtn->SetVisibility(ESlateVisibility::Visible);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Log, TEXT("@@@PortConnBtnClicked::ConnectServer fail"));
+	}
 }
 
 void ULogInUserWidget::LogInBtnClicked()
@@ -34,21 +53,17 @@ void ULogInUserWidget::LogInBtnClicked()
 	int32 tempCnt = FCString::Atoi(*idStr);
 
 	UChattingClientManager* manager = UChattingClientManager::GetInstance();
-	USocketManager* socketManager = USocketManager::GetInstance();//manager->GetSocket();
+	USocketManager* socketManager = USocketManager::GetInstance();
 	
-	if (socketManager->ConnectServer())
+	if (socketManager)
 	{
-		UE_LOG(LogTemp, Log, TEXT("ConnectServer success@@@@@@@@@@@@@@"));
 		socketManager->SendLogin(idStr);
+		UE_LOG(LogTemp, Log, TEXT("@@@LogInBtnClicked::SendLogin success"));
+		UserWidgetManager->OnOffLogInView(false);
+		UserWidgetManager->OnOffLobbyView(true);
 	}
 	else
 	{
-		UE_LOG(LogTemp, Log, TEXT("ConnectServer fail@@@@@@@@@@@@@@"));
+		UE_LOG(LogTemp, Log, TEXT("@@@LogInBtnClicked::SendLogin fail"));
 	}
-
-	//ChatController->RequestSendLogin(tempStr);
-	/*if (tempCnt > 0)
-	{
-		NPCBot->BuyItem1(tempCnt);
-	}*/
 }

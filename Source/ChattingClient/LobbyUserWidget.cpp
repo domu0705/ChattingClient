@@ -11,12 +11,6 @@ void ULobbyUserWidget::NativeConstruct()
 	{
 		RoomListBtn->OnClicked.AddDynamic(this, &ULobbyUserWidget::RoomListBtnClicked);
 	}
-
-	//SetLoginText();
-	//if (Btn_LogIn)
-	//{
-	//	Btn_LogIn->OnClicked.AddDynamic(this, &ULogIn_UserWidget::Btn_LogIn_Func);
-	//}
 }
 
 void ULobbyUserWidget::RoomListBtnClicked()
