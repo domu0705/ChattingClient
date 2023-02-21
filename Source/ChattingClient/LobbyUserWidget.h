@@ -20,5 +20,6 @@ public:
 	UPROPERTY(meta = (BindWidget))
 		UButton* RoomListBtn = nullptr;
 
-	void RoomListBtnClicked();
+	UFUNCTION()
+		void RoomListBtnClicked();
 };

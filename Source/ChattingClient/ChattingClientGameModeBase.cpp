@@ -29,7 +29,7 @@ void AChattingClientGameModeBase::BeginPlay()
 
 	//UE_LOG(LogTemp, Log, TEXT("BeginPlay 시작됨@@@@@@@@@@@@@@"));
 
-	UserWidgetManager = new UUserWidgetManager(); //CreateDefaultSubobject<UUserWidgetManager>(TEXT("userWidgetManager"))
+	UserWidgetManager = UUserWidgetManager::GetInstance();// new UUserWidgetManager(); //CreateDefaultSubobject<UUserWidgetManager>(TEXT("userWidgetManager"))
 	UserWidgetManager->CreateLogInView( GetWorld() );
 	UserWidgetManager->CreateLobbyView(GetWorld());
 }

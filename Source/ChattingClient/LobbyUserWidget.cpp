@@ -9,7 +9,7 @@ void ULobbyUserWidget::NativeConstruct()
 
 	if (RoomListBtn)
 	{
-		RoomListBtn->OnClicked.AddDynamic(this, &ULobbyUserWidget::RoomListBtnClicked);
+		//RoomListBtn->OnClicked.AddDynamic(this, &ULobbyUserWidget::RoomListBtnClicked);
 	}
 }
 
