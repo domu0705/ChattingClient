@@ -9,6 +9,12 @@
 void AChattingClientGameModeBase::StartPlay()
 {
 	Super::StartPlay();
+	auto aa = GetWorld();
+
+	ChattingClientManager = new UChattingClientManager();
+	SocketManager = new USocketManager();
+	ChattingClientManager->SetSocket(SocketManager);
+	//GameInstance->SetSocketManager(SocketManager);
 }
 
 void AChattingClientGameModeBase::BeginPlay()
@@ -23,10 +29,10 @@ void AChattingClientGameModeBase::BeginPlay()
 
 	//UE_LOG(LogTemp, Log, TEXT("BeginPlay 시작됨@@@@@@@@@@@@@@"));
 
-	auto gameInstance = GetWorld()->GetGameInstance();
-	UChattingClientGameInstance* GameInstance = Cast<UChattingClientGameInstance>(gameInstance);
-	userWidgetManager = new UUserWidgetManager(); //CreateDefaultSubobject<UUserWidgetManager>(TEXT("userWidgetManager"))
-	userWidgetManager->CreateLogInView( GetWorld() );
+	UserWidgetManager = new UUserWidgetManager(); //CreateDefaultSubobject<UUserWidgetManager>(TEXT("userWidgetManager"))
+	UserWidgetManager->CreateLogInView( GetWorld() );
 
 }
+
+//endplay에서 UUserWidgetManager delete
 

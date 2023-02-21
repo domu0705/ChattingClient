@@ -2,4 +2,14 @@
 
 
 #include "ChattingClientGameInstance.h"
-
+//
+//
+//void UChattingClientGameInstance::SetSocketManager(USocketManager* socketManager)
+//{
+//	SocketManager = socketManager;
+//}
+//
+//USocketManager* UChattingClientGameInstance::GetSocketManager()
+//{
+//	return SocketManager;
+//}

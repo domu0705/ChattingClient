@@ -11,21 +11,26 @@
 /**
  * 
  */
-class CHATTINGCLIENT_API ConnSocket
+class CHATTINGCLIENT_API USocketManager
 {
 
 private:
 	FSocket* socket;
-	int port;
+	int32 port;
 
 public:
-	ConnSocket();
-	~ConnSocket();
+	static USocketManager* GetInstance() {
+		static USocketManager s;
+		return &s;
+	}
 
-	void ConnectServer();
+	bool isConnected;
+	USocketManager();
+	~USocketManager();
+
+	bool ConnectServer();
 	void Send(FString& string);
 	void SendLogin(const FString& name);
 
 protected:
-	bool isConnected;
 };

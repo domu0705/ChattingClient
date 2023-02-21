@@ -6,7 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Runtime/UMG/Public/Components/Button.h"
 #include "Runtime/UMG/Public/Components/EditableTextBox.h"
-
+#include "ChattingClientManager.h"
 #include "LogInUserWidget.generated.h"
 
 /**

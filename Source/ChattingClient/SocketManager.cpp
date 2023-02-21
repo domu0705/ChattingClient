@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 //안되면 actor class 상속받기.
 
-#include "ConnSocket.h"
+#include "SocketManager.h"
 
 #include "Windows/AllowWindowsPlatformTypes.h"
 #include "Engine.h"
@@ -9,48 +9,57 @@
 #include "Sockets.h"
 #include "SocketSubsystem.h"
 
-ConnSocket::ConnSocket()
+USocketManager::USocketManager()
 {
-	port = 4444;
+	port = 1112;
 }
 
-ConnSocket::~ConnSocket()
+USocketManager::~USocketManager()
 {
 
 }
 
-void ConnSocket::Send(FString& string)
+void USocketManager::Send(FString& string)
 {
 	string += "\r\n";
 
 	//int size = ;
 	//int sent = ;
 
-	//socket->Send(, size,sent );//uint8= 음수가 아닌, 8bit로 표현 가능한 숫자
+
+	const char* result = TCHAR_TO_ANSI(*string);
+	int32 sendedBytes = 0;
+	uint8_t slidePressure = (uint8_t)atoi(result);
+	socket->Send( &slidePressure, string.Len(), sendedBytes);//uint8= 음수가 아닌, 8bit로 표현 가능한 숫자
 	//Socket->Send((uint8*)TCHAR_TO_UTF8(serializedChar), size, sent);
 }
 
-void ConnSocket::SendLogin(const FString& name)
+void USocketManager::SendLogin(const FString& name)
 {
 	FString command = FString::Printf(TEXT("LOGIN %s\r\n"), *name);
 	Send(command);
 }
 
 
-void ConnSocket::ConnectServer()
+bool USocketManager::ConnectServer()
 {
-	socket = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateSocket(NAME_Stream, TEXT("default"), false);
-
+	FSocket* socketTmp = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateSocket(TEXT("Stream"), TEXT("Client Socket"));
 	FString address = TEXT("127.0.0.1");
 	FIPv4Address ip;
-	
 	FIPv4Address::Parse(address, ip);
 
 	TSharedRef<FInternetAddr> addr = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateInternetAddr();
 	addr->SetIp(ip.Value);
 	addr->SetPort(port);
 
-	if (socket->Connect(*addr)) {
+	if (socketTmp->Connect(*addr)) {
 		isConnected = true;
+		socket = socketTmp;
+		return true;
 	}
+	else
+	{
+		return false;
+	}
+
 }
