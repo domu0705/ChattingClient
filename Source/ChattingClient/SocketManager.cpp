@@ -23,15 +23,21 @@ void USocketManager::Send(FString& string)
 {
 	string += "\r\n";
 
-	//int size = ;
-	//int sent = ;
+	TArray<uint8> msg;
+	FTCHARToUTF8 Converter(*string);
+	msg.Append((uint8*)Converter.Get(), Converter.Length());
 
+	int32 ByteSent = 0;
+	bool IsSended = socket->Send(msg.GetData(), msg.Num(), ByteSent);
 
-	const char* result = TCHAR_TO_ANSI(*string);
-	int32 sendedBytes = 0;
-	uint8_t slidePressure = (uint8_t)atoi(result);
-	socket->Send( &slidePressure, string.Len(), sendedBytes);//uint8= 음수가 아닌, 8bit로 표현 가능한 숫자
-	//Socket->Send((uint8*)TCHAR_TO_UTF8(serializedChar), size, sent);
+	if (IsSended)
+	{
+		UE_LOG(LogTemp, Log, TEXT("Sended Message: %s"), *string);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Failed to send message"));
+	}
 }
 
 void USocketManager::SendLogin(const FString& name)
@@ -43,7 +49,7 @@ void USocketManager::SendLogin(const FString& name)
 
 bool USocketManager::ConnectServer()
 {
-	FSocket* socketTmp = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateSocket(TEXT("Stream"), TEXT("Client Socket"));
+	socket = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateSocket(TEXT("Stream"), TEXT("Client Socket"));
 	FString address = TEXT("127.0.0.1");
 	FIPv4Address ip;
 	FIPv4Address::Parse(address, ip);
@@ -52,9 +58,8 @@ bool USocketManager::ConnectServer()
 	addr->SetIp(ip.Value);
 	addr->SetPort(port);
 
-	if (socketTmp->Connect(*addr)) {
+	if (socket->Connect(*addr)) {
 		isConnected = true;
-		socket = socketTmp;
 		return true;
 	}
 	else
@@ -62,4 +67,11 @@ bool USocketManager::ConnectServer()
 		return false;
 	}
 
+}
+
+int USocketManager::WideCharToMBT(char* to, wchar_t* from)
+{
+	int len = WideCharToMultiByte(CP_ACP, 0, from, -1, NULL, 0, NULL, NULL);
+	WideCharToMultiByte(CP_ACP, 0, from, -1, to, len, NULL, NULL);
+	return len;
 }

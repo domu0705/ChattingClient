@@ -31,6 +31,7 @@ public:
 	bool ConnectServer();
 	void Send(FString& string);
 	void SendLogin(const FString& name);
+	int WideCharToMBT(char* from, wchar_t* to);
 
 protected:
 };
