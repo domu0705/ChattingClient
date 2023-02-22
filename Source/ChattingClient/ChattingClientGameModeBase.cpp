@@ -5,6 +5,12 @@
 #include "ChattingClientGameInstance.h"
 #include <Blueprint/UserWidget.h>
 
+AChattingClientGameModeBase::AChattingClientGameModeBase()
+{
+	PrimaryActorTick.bStartWithTickEnabled = true;
+	PrimaryActorTick.bCanEverTick = true;
+}
+
 //플레이가 시작되었을 때, 게임 모드에서 액터들의 BeginPlay() 함수를 호출하는 역할.
 void AChattingClientGameModeBase::StartPlay()
 {
@@ -38,7 +44,10 @@ void AChattingClientGameModeBase::BeginPlay()
 void AChattingClientGameModeBase::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-	//if (SocketManager != nullptr) SocketManager->Tick();
+	if (SocketManager != nullptr)
+	{
+		SocketManager->Tick();
+	}
 }
 
 

@@ -17,6 +17,7 @@ class CHATTINGCLIENT_API AChattingClientGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 
+	AChattingClientGameModeBase();
 public:
 	//UFUNCTION(BlueprintCallable, Category = "UMG_Game") //UFunction 메크로를 통해 이 함수를 블루프린트에서 호출할 수 있도록 함
 	//	void ChangeMenuWidget(TSubclassOf<UUserWidget> NewWidgetClass);

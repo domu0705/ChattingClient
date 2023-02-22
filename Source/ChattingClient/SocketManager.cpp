@@ -8,6 +8,7 @@
 #include "Runtime/Networking/Public/Networking.h"
 #include "Sockets.h"
 #include "SocketSubsystem.h"
+#include "Internationalization/Text.h"
 
 USocketManager::USocketManager()
 {
@@ -23,11 +24,7 @@ void USocketManager::Send(FString& string)
 {
 	setlocale(LC_ALL, "korean");
 	string += "\r\n";
-	/*
-	FTCHARToUTF8 Converter(*string);
-	TArray<uint8> msg;
-	msg.Append((uint8*)Converter.Get(), Converter.Length());
-	*/
+
 	char c[1024];
 
 	TArray<uint8> msg;
@@ -81,55 +78,56 @@ bool USocketManager::ConnectServer()
 }
 
 //actor에 존재하는 tick이 실행될때마다 이것도 함께 실행됨
-/*
+
 void USocketManager::Tick()
 {
 	uint32 pendingSize = 0;
 	if (!isConnected || !(socket->HasPendingData(pendingSize)))
-	{
 		return;
-	}
-
+	
 	int curRecvBytes = 0;
 	bool isReceived = socket->Recv(buffer + recvBytes, BUFFER_SIZE - recvBytes, curRecvBytes);
 
 	if (isReceived)
 	{
 		recvBytes += curRecvBytes;
+		UE_LOG(LogTemp, Log, TEXT("recvBytes %d"), recvBytes);
 
-
-		//wchar_t* pStr = MBTtoWideChar(buffer);
-
-		const FString& bufferToString = pStr;
-
-		if (pStr != nullptr)
-		{
-
-			if (bufferToString.Contains("\r\n") == true)
-			{
-				TArray<FString> lines;
-				bufferToString.ParseIntoArray(lines, TEXT("\r\n"));
-				if (lines.Num() > 0)
-				{
-					for (const FString& line : lines)
-					{
-						HandleRecv(line);
-					}
-					memset(buffer, 0, BUFFER_SIZE);
-					recvBytes = 0;
-				}
-			}
-			delete pStr;
-
-		}
-		else
+		if (curRecvBytes <= 0)
 		{
 			memset(buffer, 0, BUFFER_SIZE);
-			RecvBytes = 0;
+			recvBytes = 0;
+			UE_LOG(LogTemp, Log, TEXT("curRecvBytes <= 0"));
+			return;
 		}
+
+
+		//한글 받아지는 변환
+		FString recvStr = FString(UTF8_TO_TCHAR((const ANSICHAR*)buffer));
+
+		// Log the received string
+		UE_LOG(LogTemp, Log, TEXT("@@ReceivedString: %s"), *recvStr);
+
+
+		if (recvStr.Contains("\r\n") == true)
+		{
+			TArray<FString> lines;
+			recvStr.ParseIntoArray(lines, TEXT("\r\n"));
+			if (lines.Num() > 0)
+			{
+				for (const FString& line : lines)
+				{
+					//HandleRecv(line);
+					UE_LOG(LogTemp, Log, TEXT("Recv lines"));
+
+				}
+			}
+		}
+		memset(buffer, 0, BUFFER_SIZE);
+		recvBytes = 0;
 	}
 }
-*/
+
 /*
 int USocketManager::WideCharToMBT(char* to, wchar_t* from)
 {

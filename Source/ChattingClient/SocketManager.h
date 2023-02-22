@@ -31,7 +31,7 @@ public:
 	USocketManager();
 	~USocketManager();
 
-	//void Tick();
+	void Tick();
 	bool ConnectServer();
 	void Send(FString& string);
 	void SendLogin(const FString& name);
