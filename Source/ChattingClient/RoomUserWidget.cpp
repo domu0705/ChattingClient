@@ -29,7 +29,11 @@ void URoomUserWidget::QuitBtnClicked()
 {
 	UE_LOG(LogTemp, Log, TEXT(" ULobbyUserWidget::QuitBtnClicked()"));
 	UUserWidgetManager* UImanager = UUserWidgetManager::GetInstance();
-	UImanager->OnOffRoomOptionView(false);
+	UImanager->OnOffRoomView(false);
+	UImanager->OnOffLobbyView(true);
+
+	UChattingClientManager* manager = UChattingClientManager::GetInstance();
+	manager->GetSocket()->SendQuitRoom();
 	chatLog = TEXT("");
 }
 

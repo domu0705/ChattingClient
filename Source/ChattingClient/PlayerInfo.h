@@ -28,6 +28,7 @@ public:
         CREATE_ROOM,
         JOIN_ROOM,
         WAIT_ROOM_CREATION,
+        WAIT_PRIVATE_MSG,
         X,
     };
 

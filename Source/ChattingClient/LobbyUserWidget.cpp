@@ -18,6 +18,9 @@ void ULobbyUserWidget::NativeConstruct()
 	if (!CreateRoomBtn)
 		return;
 	CreateRoomBtn->OnClicked.AddDynamic(this, &ULobbyUserWidget::CreateRoomBtnClicked);
+	if (!PrivateMsgBtn)
+		return;
+	PrivateMsgBtn->OnClicked.AddDynamic(this, &ULobbyUserWidget::PrivateMsgBtnClicked);
 }
 
 //방 리스트 버튼 클릭
@@ -41,6 +44,15 @@ void ULobbyUserWidget::CreateRoomBtnClicked()
 	UUserWidgetManager* UImanager = UUserWidgetManager::GetInstance();
 
 	UImanager->OnOffRoomOptionView(true);
+
+}
+
+void ULobbyUserWidget::PrivateMsgBtnClicked()
+{
+	UE_LOG(LogTemp, Log, TEXT(" ULobbyUserWidget:: PrivateMsgBtnClicked버튼 시작@@@@"));
+	UUserWidgetManager* UImanager = UUserWidgetManager::GetInstance();
+
+	UImanager->OnOffPrivateMsgView(true);
 
 }
 

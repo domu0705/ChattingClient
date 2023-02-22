@@ -66,12 +66,33 @@ void USocketManager::SendUserList()
 	Send(command);
 }
 
+void USocketManager::SendQuitRoom()
+{
+	UE_LOG(LogTemp, Log, TEXT("USocketManager::SendQuitRoom()"));
+	UPlayerInfo* PlayerInfo = UChattingClientManager::GetInstance()->GetPlayerInfo();
+	if (!PlayerInfo)
+		return;
+	PlayerInfo->SetPlayerState(UPlayerInfo::LOBBY);
+	PlayerInfo->SetPacketFlag(UPlayerInfo::NON);
+	FString command = FString::Printf(TEXT("Q\n"));
+	Send(command);
+}
+
 void USocketManager::SendCreateRoom(const FString& num, const FString& name)
 {
 	UPlayerInfo* PlayerInfo = UChattingClientManager::GetInstance()->GetPlayerInfo();
 	PlayerInfo->SetPacketFlag(UPlayerInfo::WAIT_ROOM_CREATION);
 	UE_LOG(LogTemp, Log, TEXT("USocketManager::SendCreateRoom()"));
 	FString command = FString::Printf(TEXT("O %s %s\n"), *num,*name);
+	Send(command);
+}
+
+void USocketManager::SendPrivateMsg(const FString& name, const FString& msg)
+{
+	UPlayerInfo* PlayerInfo = UChattingClientManager::GetInstance()->GetPlayerInfo();
+	PlayerInfo->SetPacketFlag(UPlayerInfo::WAIT_PRIVATE_MSG);
+	UE_LOG(LogTemp, Log, TEXT("USocketManager::SendPrivateMsg()"));
+	FString command = FString::Printf(TEXT("TO %s %s\n"), *name, *msg);
 	Send(command);
 }
 
@@ -167,6 +188,13 @@ void USocketManager::CheckRecvMsg(FString& recvStr, FString& str1)
 
 	UPlayerInfo::State curState = UPlayerInfo::State(PlayerInfo->GetPlayerState());
 	UPlayerInfo::Packet curPacketFlag = UPlayerInfo::Packet(PlayerInfo->GetPacketFlag());
+	
+	if (curPacketFlag == UPlayerInfo::WAIT_PRIVATE_MSG)//귓속말
+	{
+		//귓말 갔다는 팝업
+		return;
+	}
+	
 	if(curState == UPlayerInfo::WAITING)
 	{
 		if (str1.Contains("------") == true)//로그인 성공

@@ -29,6 +29,8 @@ public:
 	UPROPERTY(meta = (BindWidget))
 		UButton* CreateRoomBtn = nullptr;
 	UPROPERTY(meta = (BindWidget))
+		UButton* PrivateMsgBtn = nullptr;
+	UPROPERTY(meta = (BindWidget))
 		UScrollBox* ListScrollBox = nullptr;
 
 
@@ -38,6 +40,8 @@ public:
 		void UserListBtnClicked();
 	UFUNCTION()
 		void CreateRoomBtnClicked();
+	UFUNCTION()
+		void PrivateMsgBtnClicked();
 
 	UFUNCTION()
 		void LoadList(const FString& msg);

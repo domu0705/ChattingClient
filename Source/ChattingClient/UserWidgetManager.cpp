@@ -6,6 +6,8 @@
 #include "LobbyUserWidget.h"
 #include "RoomOptionUserWidget.h"
 #include "RoomUserWidget.h"
+#include "RoomUserWidget.h"
+#include "PrivateMsgUserWidget.h"
 #include <UObject/ConstructorHelpers.h>
 
 //UI가 뷰포트에 추가되면(Add to ViewPort) 그 이후에 NativeContruct 함수가 호출
@@ -121,6 +123,32 @@ void UUserWidgetManager::CreateRoomView(UWorld* world)
 	}
 }
 
+void UUserWidgetManager::CreatePrivateMsgView(UWorld* world)
+{
+	if (!world)
+		return;
+
+	UE_LOG(LogTemp, Log, TEXT("@@@ CreatePrivateMsgView"));
+
+	FString path = "/Game/BP_PrivateMsg";
+
+	PrivateMsgUIClass = ConstructorHelpersInternal::FindOrLoadClass(path, UPrivateMsgUserWidget::StaticClass());
+	if (!PrivateMsgUIClass)
+		return;
+
+	PrivateMsgUI = Cast<UPrivateMsgUserWidget>(CreateWidget<UUserWidget>(world, PrivateMsgUIClass));
+	if (PrivateMsgUI)
+	{
+		PrivateMsgUI->AddToViewport();
+		OnOffPrivateMsgView(false);
+		UE_LOG(LogTemp, Log, TEXT("@@@ CreatePrivateMsgView success"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Log, TEXT("@@@ CreatePrivateMsgView  fail "));
+	}
+}
+
 void UUserWidgetManager::OnOffLogInView(bool isVIsible)
 {
 	if (!LoginUI)
@@ -196,7 +224,28 @@ void UUserWidgetManager::OnOffRoomView(bool isVIsible)
 	}
 	else
 	{
+
 		RoomUI->SetVisibility(ESlateVisibility::Collapsed);
+	}
+}
+
+void UUserWidgetManager::OnOffPrivateMsgView(bool isVIsible)
+{
+	UE_LOG(LogTemp, Log, TEXT("@@@  UUserWidgetManager::OnOffPrivateMsgView()"));
+	if (!PrivateMsgUI)
+	{
+		UE_LOG(LogTemp, Log, TEXT("@@@  없음"));
+		return;
+	}
+
+	if (isVIsible)
+	{
+		UE_LOG(LogTemp, Log, TEXT("@@@  UUserWidgetManager::OnOffPrivateMsgView() | SetVisibility(ESlateVisibility::Visible)"));
+		PrivateMsgUI->SetVisibility(ESlateVisibility::Visible);
+	}
+	else
+	{
+		PrivateMsgUI->SetVisibility(ESlateVisibility::Collapsed);
 	}
 }
 

@@ -10,6 +10,8 @@ void URoomOptionUserWidget::NativeConstruct()
 	if (!OKBtn)
 		return;
 	OKBtn->OnClicked.AddDynamic(this, &URoomOptionUserWidget::OKBtnClicked);
+	if (!CloseBtn)
+		return;
 	CloseBtn->OnClicked.AddDynamic(this, &URoomOptionUserWidget::CloseBtnClicked);
 }
 
