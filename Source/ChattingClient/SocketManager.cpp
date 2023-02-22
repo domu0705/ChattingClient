@@ -57,8 +57,19 @@ void USocketManager::SendRoomList()
 	Send(command);
 }
 
+void USocketManager::SendUserList()
+{
+	UPlayerInfo* PlayerInfo = UChattingClientManager::GetInstance()->GetPlayerInfo();
+	PlayerInfo->SetPacketFlag(UPlayerInfo::USER_LIST);
+	UE_LOG(LogTemp, Log, TEXT("USocketManager::SendUserList()"));
+	FString command = FString::Printf(TEXT("US\n"));//TEXT("LT\r\n");
+	Send(command);
+}
+
 void USocketManager::SendCreateRoom(const FString& num, const FString& name)
 {
+	UPlayerInfo* PlayerInfo = UChattingClientManager::GetInstance()->GetPlayerInfo();
+	PlayerInfo->SetPacketFlag(UPlayerInfo::WAIT_ROOM_CREATION);
 	UE_LOG(LogTemp, Log, TEXT("USocketManager::SendCreateRoom()"));
 	FString command = FString::Printf(TEXT("O %s %s\n"), *num,*name);
 	Send(command);
@@ -123,12 +134,12 @@ void USocketManager::Tick()
 			recvStr.ParseIntoArray(lines, TEXT("\r\n"));
 			if (lines.Num() > 0)
 			{
-				UE_LOG(LogTemp, Log, TEXT("@@ lines Num: %d"), lines.Num());
-				CheckRecvMsg(lines[0]);
+				//UE_LOG(LogTemp, Log, TEXT("@@ lines Num: %d"), lines.Num());
+				CheckRecvMsg(recvStr ,lines[0]);
 				for (const FString& line : lines)
 				{
 					
-					UE_LOG(LogTemp, Log, TEXT("@@one line : %s"), *line);
+					//UE_LOG(LogTemp, Log, TEXT("@@one line : %s"), *line);
 
 				}
 			}
@@ -139,9 +150,9 @@ void USocketManager::Tick()
 	}
 }
 
-void USocketManager::CheckRecvMsg(FString& str)
+void USocketManager::CheckRecvMsg(FString& recvStr, FString& str1)
 {
-	UE_LOG(LogTemp, Log, TEXT("@@@@@@@@@@@@@@@@@@@@USocketManager::CheckRecvMsg: %s"), *str);
+	UE_LOG(LogTemp, Log, TEXT("@@@@@@@@@@@@@@@@@@@@USocketManager::CheckRecvMsg: %s"), *recvStr);
 	UChattingClientManager*manager = UChattingClientManager::GetInstance();
 	if (!manager)
 		return;
@@ -158,7 +169,7 @@ void USocketManager::CheckRecvMsg(FString& str)
 	UPlayerInfo::Packet curPacketFlag = UPlayerInfo::Packet(PlayerInfo->GetPacketFlag());
 	if(curState == UPlayerInfo::WAITING)
 	{
-		if (str.Contains("------") == true)//로그인 성공
+		if (str1.Contains("------") == true)//로그인 성공
 		{
 			UE_LOG(LogTemp, Log, TEXT("@@@ USocketManager::CheckRecvMsg: 로그인 성공. state->LOBBY"));
 			PlayerInfo->SetPlayerState(UPlayerInfo::LOBBY);
@@ -172,14 +183,15 @@ void USocketManager::CheckRecvMsg(FString& str)
 	}
 	else if (curState == UPlayerInfo::LOBBY)
 	{
+		UE_LOG(LogTemp, Log, TEXT("LOBBY 입장!!!!!!!!!!!!!!!"));
 		if (curPacketFlag == UPlayerInfo::USER_LIST)
 		{
-
+			UIManager->UpdateList(recvStr);
 		}
 		else if (curPacketFlag == UPlayerInfo::ROOM_LIST)
 		{
-			UE_LOG(LogTemp, Log, TEXT("~~~~~~~~~~~USocketManager::CheckRecvMsg() } UPlayerInfo::ROOM_LIST %s"), *str);
-			UIManager->UpdateRoomList(str);
+			UE_LOG(LogTemp, Log, TEXT("~~~~~~~~~~~USocketManager::CheckRecvMsg() } UPlayerInfo::ROOM_LIST %s"), *recvStr);
+			UIManager->UpdateList(recvStr);
 		}
 		else if (curPacketFlag == UPlayerInfo::ROOM_INFO)
 		{
@@ -189,10 +201,27 @@ void USocketManager::CheckRecvMsg(FString& str)
 		{
 
 		}
+		else if (curPacketFlag == UPlayerInfo::WAIT_ROOM_CREATION)
+		{
+			UE_LOG(LogTemp, Log, TEXT("room creation result %s"), *str1);
+			if (str1.Contains(TEXT("개설")) == true)//방 생성 성공
+			{
+				UE_LOG(LogTemp, Log, TEXT("success room creation"));
+				PlayerInfo->SetPlayerState(UPlayerInfo::ROOM);
+				UIManager->OnOffLobbyView(false);
+				UIManager->OnOffRoomOptionView(false);
+				UIManager->OnOffRoomView(true);
+				UIManager->UpdateChatList(recvStr);
+			}
+			else
+			{
+				UE_LOG(LogTemp, Log, TEXT("fail room creation"));
+			}
+		}
 	}
 	else if (curState == UPlayerInfo::ROOM)
 	{
-
+		UIManager->UpdateChatList(recvStr);
 	}
 	else if (curState == UPlayerInfo::LOGOUT)
 	{

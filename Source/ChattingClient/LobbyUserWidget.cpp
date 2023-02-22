@@ -11,6 +11,10 @@ void ULobbyUserWidget::NativeConstruct()
 		return;
 	RoomListBtn->OnClicked.AddDynamic(this, &ULobbyUserWidget::RoomListBtnClicked);
 
+	if (!UserListBtn)
+		return;
+	UserListBtn->OnClicked.AddDynamic(this, &ULobbyUserWidget::UserListBtnClicked);
+
 	if (!CreateRoomBtn)
 		return;
 	CreateRoomBtn->OnClicked.AddDynamic(this, &ULobbyUserWidget::CreateRoomBtnClicked);
@@ -24,6 +28,13 @@ void ULobbyUserWidget::RoomListBtnClicked()
 	manager->GetSocket()->SendRoomList();
 }
 
+void ULobbyUserWidget::UserListBtnClicked()
+{
+	UE_LOG(LogTemp, Log, TEXT(" ULobbyUserWidget::UserListBtnClicked버튼 시작@@@@"));
+	UChattingClientManager* manager = UChattingClientManager::GetInstance();
+	manager->GetSocket()->SendUserList();
+}
+
 void ULobbyUserWidget::CreateRoomBtnClicked()
 {
 	UE_LOG(LogTemp, Log, TEXT(" ULobbyUserWidget:: CreateRoomBtnClicked버튼 시작@@@@"));
@@ -34,7 +45,7 @@ void ULobbyUserWidget::CreateRoomBtnClicked()
 }
 
 //방 리스트 정보 텍스트 갱신
-void ULobbyUserWidget::LoadRoomList(const FString& msg)
+void ULobbyUserWidget::LoadList(const FString& msg)
 {
 	UE_LOG(LogTemp, Log, TEXT(" !@!@!@!@ ULobbyUserWidget::LoadRoomList ,%s"),*msg);
 	ListScrollBox->ClearChildren();

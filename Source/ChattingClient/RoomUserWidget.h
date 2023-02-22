@@ -10,35 +10,35 @@
 #include "Runtime/UMG/Public/Components/TextBlock.h"
 #include "ChattingClientManager.h"
 #include "SocketManager.h"
-#include "LobbyUserWidget.generated.h"
+#include "RoomUserWidget.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class CHATTINGCLIENT_API ULobbyUserWidget : public UUserWidget
+class CHATTINGCLIENT_API URoomUserWidget : public UUserWidget
 {
 	GENERATED_BODY()
+
+private:
+	FString chatLog;
+
 public:
 	void NativeConstruct() override;
 
 	UPROPERTY(meta = (BindWidget))
-		UButton* RoomListBtn = nullptr;
+		UButton* SendBtn = nullptr;
 	UPROPERTY(meta = (BindWidget))
-		UButton* UserListBtn = nullptr;
+		UButton* QuitBtn = nullptr;
 	UPROPERTY(meta = (BindWidget))
-		UButton* CreateRoomBtn = nullptr;
-	UPROPERTY(meta = (BindWidget))
-		UScrollBox* ListScrollBox = nullptr;
-
-
-	UFUNCTION()
-		void RoomListBtnClicked();
-	UFUNCTION()
-		void UserListBtnClicked();
-	UFUNCTION()
-		void CreateRoomBtnClicked();
+		UScrollBox* ChatScrollBox = nullptr;
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+		UEditableTextBox* ChatEditText;
 
 	UFUNCTION()
-		void LoadList(const FString& msg);
+		void SendBtnClicked();
+	UFUNCTION()
+		void QuitBtnClicked();
+	UFUNCTION()
+		void LoadChat(FString& msg);
 };

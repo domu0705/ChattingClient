@@ -5,6 +5,7 @@
 #include "LogInUserWidget.h"
 #include "LobbyUserWidget.h"
 #include "RoomOptionUserWidget.h"
+#include "RoomUserWidget.h"
 #include <UObject/ConstructorHelpers.h>
 
 //UI가 뷰포트에 추가되면(Add to ViewPort) 그 이후에 NativeContruct 함수가 호출
@@ -95,6 +96,30 @@ void UUserWidgetManager::CreateRoomOptionView(UWorld* world)
 	}
 }
 
+void UUserWidgetManager::CreateRoomView(UWorld* world)
+{
+	if (!world)
+		return;
+
+	UE_LOG(LogTemp, Log, TEXT("@@@ CreateRoomView"));
+
+	FString path = "/Game/BP_Room";
+	RoomUIClass = ConstructorHelpersInternal::FindOrLoadClass(path, URoomUserWidget::StaticClass());
+	if (!RoomUIClass)
+		return;
+
+	RoomUI = Cast<URoomUserWidget>(CreateWidget<UUserWidget>(world, RoomUIClass));
+	if (RoomUI)
+	{
+		RoomUI->AddToViewport();
+		OnOffRoomView(false);
+		UE_LOG(LogTemp, Log, TEXT("@@@ CreateRoomView success"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Log, TEXT("@@@ CreateRoomView  fail "));
+	}
+}
 
 void UUserWidgetManager::OnOffLogInView(bool isVIsible)
 {
@@ -155,9 +180,36 @@ void UUserWidgetManager::OnOffRoomOptionView(bool isVIsible)
 	}
 }
 
-void UUserWidgetManager::UpdateRoomList(const FString& msg)
+void UUserWidgetManager::OnOffRoomView(bool isVIsible)
+{
+	UE_LOG(LogTemp, Log, TEXT("@@@  UUserWidgetManager::OnOffRoomView()"));
+	if (!RoomUI)
+	{
+		UE_LOG(LogTemp, Log, TEXT("@@@  없음"));
+		return;
+	}
+
+	if (isVIsible)
+	{
+		UE_LOG(LogTemp, Log, TEXT("@@@  UUserWidgetManager::OnOffRoomView() | SetVisibility(ESlateVisibility::Visible)"));
+		RoomUI->SetVisibility(ESlateVisibility::Visible);
+	}
+	else
+	{
+		RoomUI->SetVisibility(ESlateVisibility::Collapsed);
+	}
+}
+
+void UUserWidgetManager::UpdateList(const FString& msg)
 {
 	UE_LOG(LogTemp, Log, TEXT("@@@ UUserWidgetManager::UpdateRoomList %s"),*msg);
-	LobbyUI->LoadRoomList(msg);
+	LobbyUI->LoadList(msg);
+	//LobbyUIObject LoadRoomList(msg);
+}
+
+void UUserWidgetManager::UpdateChatList(FString& msg)
+{
+	UE_LOG(LogTemp, Log, TEXT("@@@ UUserWidgetManager::UpdateChatList %s"), *msg);
+	RoomUI->LoadChat(msg);
 	//LobbyUIObject LoadRoomList(msg);
 }

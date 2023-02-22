@@ -27,6 +27,7 @@ public:
         SEND_NOTE,//쪽지 보내기
         CREATE_ROOM,
         JOIN_ROOM,
+        WAIT_ROOM_CREATION,
         X,
     };
 

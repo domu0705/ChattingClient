@@ -14,6 +14,7 @@
 class ULogInUserWidget;
 class ULobbyUserWidget;
 class URoomOptionUserWidget;
+class URoomUserWidget;
 
 class CHATTINGCLIENT_API UUserWidgetManager
 {
@@ -29,10 +30,13 @@ public:
 	void CreateLogInView(UWorld* world);
 	void CreateLobbyView(UWorld* world);
 	void CreateRoomOptionView(UWorld* world);
+	void CreateRoomView(UWorld* world);
 	void OnOffLogInView(bool isVIsible);
 	void OnOffLobbyView(bool isVIsible);
 	void OnOffRoomOptionView(bool isVisible);
-	void UpdateRoomList(const FString& msg);
+	void OnOffRoomView(bool isVisible);
+	void UpdateList(const FString& msg);
+	void UpdateChatList(FString& msg);
 	//void CreateUserWidgetClass();
 	//virtual void BeginPlay() override; 여기 이거 못씀
 
@@ -41,9 +45,11 @@ private:
 	TSubclassOf<UUserWidget> LoginUIClass;
 	TSubclassOf<UUserWidget> LobbyUIClass;
 	TSubclassOf<UUserWidget> RoomOptionUIClass;
+	TSubclassOf<UUserWidget> RoomUIClass;
 	ULogInUserWidget* LoginUI;
 	ULobbyUserWidget* LobbyUI;
 	URoomOptionUserWidget* RoomOptionUI;
+	URoomUserWidget* RoomUI;
 	UChattingClientManager* manager;
 	//TSharedPtr<UUserWidget> LoginUIObject;
 	//LoginUIObject.IsValid();
