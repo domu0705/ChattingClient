@@ -10,14 +10,27 @@ void ULobbyUserWidget::NativeConstruct()
 	if (!RoomListBtn)
 		return;
 	RoomListBtn->OnClicked.AddDynamic(this, &ULobbyUserWidget::RoomListBtnClicked);
+
+	if (!CreateRoomBtn)
+		return;
+	CreateRoomBtn->OnClicked.AddDynamic(this, &ULobbyUserWidget::CreateRoomBtnClicked);
 }
 
 //방 리스트 버튼 클릭
 void ULobbyUserWidget::RoomListBtnClicked()
 {
-	UE_LOG(LogTemp, Log, TEXT(" RoomListBtnClicked버튼 시작@@@@"));
-	//UChattingClientManager* manager = UChattingClientManager::Get
-	//manager->GetSocket()->SendRoomList();
+	UE_LOG(LogTemp, Log, TEXT(" ULobbyUserWidget::RoomListBtnClicked버튼 시작@@@@"));
+	UChattingClientManager* manager = UChattingClientManager::GetInstance();
+	manager->GetSocket()->SendRoomList();
+}
+
+void ULobbyUserWidget::CreateRoomBtnClicked()
+{
+	UE_LOG(LogTemp, Log, TEXT(" ULobbyUserWidget:: CreateRoomBtnClicked버튼 시작@@@@"));
+	UUserWidgetManager* UImanager = UUserWidgetManager::GetInstance();
+
+	UImanager->OnOffRoomOptionView(true);
+
 }
 
 //방 리스트 정보 텍스트 갱신

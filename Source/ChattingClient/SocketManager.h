@@ -44,6 +44,7 @@ public:
 	void Send(FString& string);
 	void SendLogin(const FString& name);
 	void SendRoomList();
+	void SendCreateRoom(const FString& num, const FString& name);
 	void CheckRecvMsg(FString& str);
 	int WideCharToMBT(char* from, wchar_t* to);
 

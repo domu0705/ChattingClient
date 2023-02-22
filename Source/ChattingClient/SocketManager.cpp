@@ -52,7 +52,15 @@ void USocketManager::SendLogin(const FString& name)
 
 void USocketManager::SendRoomList()
 {
+	UE_LOG(LogTemp, Log, TEXT("USocketManager::SendRoomList()"));
 	FString command = FString::Printf(TEXT("LT\n"));//TEXT("LT\r\n");
+	Send(command);
+}
+
+void USocketManager::SendCreateRoom(const FString& num, const FString& name)
+{
+	UE_LOG(LogTemp, Log, TEXT("USocketManager::SendCreateRoom()"));
+	FString command = FString::Printf(TEXT("O %s %s\n"), *num,*name);
 	Send(command);
 }
 
@@ -106,7 +114,7 @@ void USocketManager::Tick()
 		FString recvStr = FString(UTF8_TO_TCHAR((const ANSICHAR*)buffer));
 
 		// Log the received string
-		//UE_LOG(LogTemp, Log, TEXT("@@ReceivedString: %s"), *recvStr);
+		UE_LOG(LogTemp, Log, TEXT("@@ReceivedString: %s"), *recvStr);
 
 		
 		if (recvStr.Contains("\r\n") == true)

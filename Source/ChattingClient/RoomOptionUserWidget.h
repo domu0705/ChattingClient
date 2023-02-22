@@ -5,36 +5,33 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Runtime/UMG/Public/Components/Button.h"
-#include "Runtime/UMG/Public/Components/ScrollBox.h"
 #include "Runtime/UMG/Public/Components/EditableTextBox.h"
-#include "Runtime/UMG/Public/Components/TextBlock.h"
 #include "ChattingClientManager.h"
 #include "SocketManager.h"
-#include "LobbyUserWidget.generated.h"
+#include "RoomOptionUserWidget.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class CHATTINGCLIENT_API ULobbyUserWidget : public UUserWidget
+class CHATTINGCLIENT_API URoomOptionUserWidget : public UUserWidget
 {
 	GENERATED_BODY()
+
 public:
 	void NativeConstruct() override;
 
 	UPROPERTY(meta = (BindWidget))
-		UButton* RoomListBtn = nullptr;
+		UButton* OKBtn = nullptr;
 	UPROPERTY(meta = (BindWidget))
-		UButton* CreateRoomBtn = nullptr;
+		UButton* CloseBtn = nullptr;
 	UPROPERTY(meta = (BindWidget))
-		UScrollBox* ListScrollBox = nullptr;
-
-
+		UEditableTextBox* NameEditText;
+	UPROPERTY(meta = (BindWidget))
+		UEditableTextBox* NumEditText;
+	
 	UFUNCTION()
-		void RoomListBtnClicked();
+		void OKBtnClicked();
 	UFUNCTION()
-		void CreateRoomBtnClicked();
-
-	UFUNCTION()
-		void LoadRoomList(const FString& msg);
+		void CloseBtnClicked();
 };

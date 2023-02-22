@@ -4,6 +4,7 @@
 #include "UserWidgetManager.h"
 #include "LogInUserWidget.h"
 #include "LobbyUserWidget.h"
+#include "RoomOptionUserWidget.h"
 #include <UObject/ConstructorHelpers.h>
 
 //UI가 뷰포트에 추가되면(Add to ViewPort) 그 이후에 NativeContruct 함수가 호출
@@ -69,6 +70,32 @@ void UUserWidgetManager::CreateLobbyView(UWorld* world)
 	}
 }
 
+void UUserWidgetManager::CreateRoomOptionView(UWorld* world)
+{
+	if (!world)
+		return;
+
+	UE_LOG(LogTemp, Log, TEXT("@@@ CreateRoomOptionView"));
+
+	FString path = "/Game/BP_CreateRoom";
+	RoomOptionUIClass = ConstructorHelpersInternal::FindOrLoadClass(path, URoomOptionUserWidget::StaticClass());
+	if (!RoomOptionUIClass)
+		return;
+
+	RoomOptionUI = Cast<URoomOptionUserWidget>(CreateWidget<UUserWidget>(world, RoomOptionUIClass));
+	if (RoomOptionUI)
+	{
+		RoomOptionUI->AddToViewport();
+		OnOffRoomOptionView(false);
+		UE_LOG(LogTemp, Log, TEXT("@@@ LobbyUIObject success"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Log, TEXT("@@@ LobbyUIObject  fail "));
+	}
+}
+
+
 void UUserWidgetManager::OnOffLogInView(bool isVIsible)
 {
 	if (!LoginUI)
@@ -76,7 +103,7 @@ void UUserWidgetManager::OnOffLogInView(bool isVIsible)
 
 	if (isVIsible)
 	{
-		OnOffLobbyView(true);
+		OnOffLobbyView(false);
 	}
 	else
 	{
@@ -105,6 +132,26 @@ void UUserWidgetManager::OnOffLobbyView(bool isVIsible)
 	{
 		UE_LOG(LogTemp, Log, TEXT("@@@ OnOffLobbyView | false"));
 		LobbyUI->SetVisibility(ESlateVisibility::Collapsed);
+	}
+}
+
+void UUserWidgetManager::OnOffRoomOptionView(bool isVIsible)
+{
+	UE_LOG(LogTemp, Log, TEXT("@@@  UUserWidgetManager::OnOffRoomOptionView()"));
+	if (!RoomOptionUI)
+	{
+		UE_LOG(LogTemp, Log, TEXT("@@@  없음"));
+		return;
+	}
+
+	if (isVIsible)
+	{
+		UE_LOG(LogTemp, Log, TEXT("@@@  UUserWidgetManager::OnOffRoomOptionView() | SetVisibility(ESlateVisibility::Visible)"));
+		RoomOptionUI->SetVisibility(ESlateVisibility::Visible);
+	}
+	else
+	{
+		RoomOptionUI->SetVisibility(ESlateVisibility::Collapsed);
 	}
 }
 
