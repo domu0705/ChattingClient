@@ -7,6 +7,7 @@
 #include "UserWidgetManager.h"
 #include "SocketManager.h"
 #include "ChattingClientManager.h"
+#include "PlayerInfo.h"
 #include "ChattingClientGameModeBase.generated.h"
 
 /**
@@ -40,6 +41,6 @@ private:
 	UUserWidgetManager* UserWidgetManager;
 	UChattingClientManager* ChattingClientManager;
 	USocketManager* SocketManager;
-
+	UPlayerInfo* PlayerInfo;
 	virtual void Tick(float DeltaSeconds) override;
 };

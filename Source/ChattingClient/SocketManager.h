@@ -3,6 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "PlayerInfo.h"
+#include "UserWidgetManager.h"
+#include "ChattingClientManager.h"
 #include "UObject/NoExportTypes.h"
 #include "Engine.h"
 #include "Networking.h"
@@ -12,6 +15,7 @@
 /**
  * 
  */
+
 class CHATTINGCLIENT_API USocketManager
 {
 	enum 
@@ -22,7 +26,7 @@ class CHATTINGCLIENT_API USocketManager
 
 private:
 	FSocket* socket;
-	int32 port;
+	//int32 port;
 	uint8 buffer[BUFFER_SIZE] = { 0 };
 	int recvBytes = 0;
 public:
@@ -39,6 +43,8 @@ public:
 	bool ConnectServer();
 	void Send(FString& string);
 	void SendLogin(const FString& name);
+	void SendRoomList();
+	void CheckRecvMsg(FString& str);
 	int WideCharToMBT(char* from, wchar_t* to);
 
 };

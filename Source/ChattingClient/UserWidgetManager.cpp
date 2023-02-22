@@ -9,6 +9,7 @@
 //UI가 뷰포트에 추가되면(Add to ViewPort) 그 이후에 NativeContruct 함수가 호출
 UUserWidgetManager::UUserWidgetManager()//(const FObjectInitializer& ObjectInitializer): Super(ObjectInitializer)//userwidget은 생성자 호출 이렇게 해야함
 {
+	manager = UChattingClientManager::GetInstance();
 	//static ConstructorHelpers::FClassFinder<UUserWidget> WB_Login(TEXT("/Game/BP_Login"));// 무조건 생성자에서만 호출WidgetBlueprint'/Game/BP_LogIn.BP_LogIn' BP오브젝트
 	//if (WB_Login.Succeeded())
 	//{
@@ -36,10 +37,10 @@ void UUserWidgetManager::CreateLogInView(UWorld* world)
 
 	auto asd = CreateWidget<UUserWidget>( world, LoginUIClass);
 
-	LoginUIObject = Cast<ULogInUserWidget>( asd );
-	if (LoginUIObject)
+	LoginUI = Cast<ULogInUserWidget>( asd );
+	if (LoginUI)
 	{
-		LoginUIObject->AddToViewport();
+		LoginUI->AddToViewport();
 	}
 }
 
@@ -55,10 +56,10 @@ void UUserWidgetManager::CreateLobbyView(UWorld* world)
 	if (!LobbyUIClass)
 		return;
 
-	LobbyUIObject = Cast<ULobbyUserWidget>(CreateWidget<UUserWidget>(world, LobbyUIClass));
-	if (LobbyUIObject)
+	LobbyUI = Cast<ULobbyUserWidget>(CreateWidget<UUserWidget>(world, LobbyUIClass));
+	if (LobbyUI)
 	{
-		LobbyUIObject->AddToViewport();
+		LobbyUI->AddToViewport();
 		OnOffLobbyView(false);
 		UE_LOG(LogTemp, Log, TEXT("@@@ LobbyUIObject success"));
 	}
@@ -70,23 +71,23 @@ void UUserWidgetManager::CreateLobbyView(UWorld* world)
 
 void UUserWidgetManager::OnOffLogInView(bool isVIsible)
 {
-	if (!LoginUIObject)
+	if (!LoginUI)
 		return;
 
 	if (isVIsible)
 	{
-		LoginUIObject->SetVisibility(ESlateVisibility::Visible);
+		OnOffLobbyView(true);
 	}
 	else
 	{
-		LoginUIObject->SetVisibility(ESlateVisibility::Collapsed);
+		LoginUI->SetVisibility(ESlateVisibility::Collapsed);
 	}
 }
 
 void UUserWidgetManager::OnOffLobbyView(bool isVIsible)
 {
-	UE_LOG(LogTemp, Log, TEXT("@@@ OnOffLobbyView"));
-	if (!LobbyUIObject) {
+	if (!LobbyUI) 
+	{
 		UE_LOG(LogTemp, Log, TEXT("@@@ OnOffLobbyView | LobbyUIObject nulllll"));
 		return;
 	}
@@ -94,12 +95,22 @@ void UUserWidgetManager::OnOffLobbyView(bool isVIsible)
 	if (isVIsible)
 	{
 		UE_LOG(LogTemp, Log, TEXT("@@@ OnOffLobbyView | true"));
-		LobbyUIObject->SetVisibility(ESlateVisibility::Visible);
+		UPlayerInfo* PlayerInfo = manager->GetPlayerInfo();
+		PlayerInfo->SetPacketFlag(UPlayerInfo::ROOM_LIST);
 
+		manager->GetSocket()->SendRoomList();
+		LobbyUI->SetVisibility(ESlateVisibility::Visible);
 	}
 	else
 	{
 		UE_LOG(LogTemp, Log, TEXT("@@@ OnOffLobbyView | false"));
-		LobbyUIObject->SetVisibility(ESlateVisibility::Collapsed);
+		LobbyUI->SetVisibility(ESlateVisibility::Collapsed);
 	}
+}
+
+void UUserWidgetManager::UpdateRoomList(const FString& msg)
+{
+	UE_LOG(LogTemp, Log, TEXT("@@@ UUserWidgetManager::UpdateRoomList %s"),*msg);
+	LobbyUI->LoadRoomList(msg);
+	//LobbyUIObject LoadRoomList(msg);
 }

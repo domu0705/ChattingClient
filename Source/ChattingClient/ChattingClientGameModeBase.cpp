@@ -18,6 +18,8 @@ void AChattingClientGameModeBase::StartPlay()
 	auto aa = GetWorld();
 
 	ChattingClientManager = UChattingClientManager::GetInstance(); // new UChattingClientManager();
+	PlayerInfo = UPlayerInfo::GetInstance();
+	ChattingClientManager->SetPlayerInfo(PlayerInfo);
 	SocketManager = USocketManager::GetInstance();// new USocketManager();
 	ChattingClientManager->SetSocket(SocketManager);
 	//GameInstance->SetSocketManager(SocketManager);
@@ -39,15 +41,16 @@ void AChattingClientGameModeBase::BeginPlay()
 	UserWidgetManager = UUserWidgetManager::GetInstance();// new UUserWidgetManager(); //CreateDefaultSubobject<UUserWidgetManager>(TEXT("userWidgetManager"))
 	UserWidgetManager->CreateLogInView( GetWorld() );
 	UserWidgetManager->CreateLobbyView(GetWorld());
+	PlayerInfo = UPlayerInfo::GetInstance();
+	PlayerInfo->ResetInfo();
 }
 
 void AChattingClientGameModeBase::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-	if (SocketManager != nullptr)
-	{
-		SocketManager->Tick();
-	}
+	if (!SocketManager)
+		return;
+	SocketManager->Tick();	
 }
 
 

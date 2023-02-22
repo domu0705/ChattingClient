@@ -12,7 +12,7 @@
 #include "Internationalization/Internationalization.h"
 USocketManager::USocketManager()
 {
-	port = 1112;
+
 }
 
 USocketManager::~USocketManager()
@@ -22,10 +22,10 @@ USocketManager::~USocketManager()
 
 void USocketManager::Send(FString& string)
 {
-	FString packetEnd = string;
-	packetEnd += "\n";
+	//FString packetEnd = string;
+	//packetEnd += "\n";
 	char message[BUFFER_SIZE];
-	const wchar_t* encode = *packetEnd;
+	const wchar_t* encode = *string;
 	char defaultSetting = '?';
 
 	int32 len = WideCharToMultiByte(CP_ACP, 0, encode, -1, NULL, 0, NULL, NULL);
@@ -42,40 +42,19 @@ void USocketManager::Send(FString& string)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Failed to send message"));
 	}
-	/*
-	setlocale(LC_ALL, "korean");
-	string += TEXT("\r\n");
-
-	char c[1024];
-
-	TArray<uint8> msg;
-	wchar_t* da = string.GetCharArray().GetData();
-	int len = wcstombs(c, da, 1024);
-	for (int i = 0; i < len; i++)
-	{
-		msg.Add(c[i]);
-	}
-
-	int32 sendingByte = 0;
-	bool IsSended = socket->Send(msg.GetData(), msg.Num(), sendingByte);
-
-	if (IsSended)
-	{
-		UE_LOG(LogTemp, Log, TEXT("Sended Message: %s"), *string);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("Failed to send message"));
-	}
-	*/
 }
 
 void USocketManager::SendLogin(const FString& name)
 {
-	FString command = FString::Printf(TEXT("LOGIN %s\r\n"), *name);
+	FString command = FString::Printf(TEXT("LOGIN %s\r\n"), *name);//name이 추가되며 공백이 생겨 뒤에 두개 무시
 	Send(command);
 }
 
+void USocketManager::SendRoomList()
+{
+	FString command = FString::Printf(TEXT("LT\n"));//TEXT("LT\r\n");
+	Send(command);
+}
 
 bool USocketManager::ConnectServer()
 {
@@ -123,32 +102,99 @@ void USocketManager::Tick()
 			return;
 		}
 
-
 		//한글 받아지는 변환
 		FString recvStr = FString(UTF8_TO_TCHAR((const ANSICHAR*)buffer));
 
 		// Log the received string
-		UE_LOG(LogTemp, Log, TEXT("@@ReceivedString: %s"), *recvStr);
+		//UE_LOG(LogTemp, Log, TEXT("@@ReceivedString: %s"), *recvStr);
 
-		/*
+		
 		if (recvStr.Contains("\r\n") == true)
 		{
 			TArray<FString> lines;
 			recvStr.ParseIntoArray(lines, TEXT("\r\n"));
 			if (lines.Num() > 0)
 			{
+				UE_LOG(LogTemp, Log, TEXT("@@ lines Num: %d"), lines.Num());
+				CheckRecvMsg(lines[0]);
 				for (const FString& line : lines)
 				{
-					//HandleRecv(line);
-					UE_LOG(LogTemp, Log, TEXT("Recv lines"));
+					
+					UE_LOG(LogTemp, Log, TEXT("@@one line : %s"), *line);
 
 				}
 			}
 		}
-		*/
+		
 		memset(buffer, 0, BUFFER_SIZE);
 		recvBytes = 0;
 	}
+}
+
+void USocketManager::CheckRecvMsg(FString& str)
+{
+	UE_LOG(LogTemp, Log, TEXT("@@@@@@@@@@@@@@@@@@@@USocketManager::CheckRecvMsg: %s"), *str);
+	UChattingClientManager*manager = UChattingClientManager::GetInstance();
+	if (!manager)
+		return;
+
+	UPlayerInfo* PlayerInfo = manager->GetPlayerInfo();
+	if (!PlayerInfo)
+		return;
+
+	UUserWidgetManager* UIManager = UUserWidgetManager::GetInstance();
+	if (!UIManager)
+		return;
+
+	UPlayerInfo::State curState = UPlayerInfo::State(PlayerInfo->GetPlayerState());
+	UPlayerInfo::Packet curPacketFlag = UPlayerInfo::Packet(PlayerInfo->GetPacketFlag());
+	if(curState == UPlayerInfo::WAITING)
+	{
+		if (str.Contains("------") == true)//로그인 성공
+		{
+			UE_LOG(LogTemp, Log, TEXT("@@@ USocketManager::CheckRecvMsg: 로그인 성공. state->LOBBY"));
+			PlayerInfo->SetPlayerState(UPlayerInfo::LOBBY);
+			UIManager->OnOffLogInView(false);
+			UIManager->OnOffLobbyView(true);
+		}
+		else//로그인 실패
+		{
+			UE_LOG(LogTemp, Log, TEXT("@@@ USocketManager::CheckRecvMsg: 로그인 실패"));
+		}
+	}
+	else if (curState == UPlayerInfo::LOBBY)
+	{
+		if (curPacketFlag == UPlayerInfo::USER_LIST)
+		{
+
+		}
+		else if (curPacketFlag == UPlayerInfo::ROOM_LIST)
+		{
+			UE_LOG(LogTemp, Log, TEXT("~~~~~~~~~~~USocketManager::CheckRecvMsg() } UPlayerInfo::ROOM_LIST %s"), *str);
+			UIManager->UpdateRoomList(str);
+		}
+		else if (curPacketFlag == UPlayerInfo::ROOM_INFO)
+		{
+
+		}
+		else if (curPacketFlag == UPlayerInfo::USER_INFO)
+		{
+
+		}
+	}
+	else if (curState == UPlayerInfo::ROOM)
+	{
+
+	}
+	else if (curState == UPlayerInfo::LOGOUT)
+	{
+
+	}
+	else //
+	{
+		UE_LOG(LogTemp, Log, TEXT("@@ USocketManager::CheckRecvMsg | else"));
+	}
+
 }
 
 /*

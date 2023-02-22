@@ -7,7 +7,7 @@
 void ULogInUserWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
-	UE_LOG(LogTemp, Log, TEXT("NativeConstruct ���۵�@@@@@@@@@@@@@@"));
+	UE_LOG(LogTemp, Log, TEXT("@@ ULogInUserWidget::NativeConstruct()"));
 
 	UserWidgetManager = UUserWidgetManager::GetInstance();
 
@@ -67,8 +67,6 @@ void ULogInUserWidget::LogInBtnClicked()
 	{
 		socketManager->SendLogin(idStr);
 		UE_LOG(LogTemp, Log, TEXT("@@@LogInBtnClicked::SendLogin success"));
-		UserWidgetManager->OnOffLogInView(false);
-		UserWidgetManager->OnOffLobbyView(true);
 	}
 	else
 	{

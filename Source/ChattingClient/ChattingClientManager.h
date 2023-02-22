@@ -6,6 +6,7 @@
 
 class UUserWidgetManager;
 class USocketManager;
+class UPlayerInfo;
 
 class CHATTINGCLIENT_API UChattingClientManager
 {
@@ -21,7 +22,8 @@ public:
 
 	void SetSocket(USocketManager* socketManager);
 	USocketManager* GetSocket();
-
+	void SetPlayerInfo(UPlayerInfo* playerInfo);
+	UPlayerInfo* GetPlayerInfo();
 	void SetUserWidgetManager(UUserWidgetManager* userWidgetManager);
 	//UUserWidgetManager* GetUserWidgetManager();
 
@@ -30,5 +32,6 @@ private:
 
 	UUserWidgetManager* UserWidgetManager;
 	USocketManager* SocketManager;
+	UPlayerInfo* PlayerInfo;
 
 };

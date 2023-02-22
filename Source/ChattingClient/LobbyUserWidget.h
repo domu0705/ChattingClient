@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Runtime/UMG/Public/Components/Button.h"
+#include "Runtime/UMG/Public/Components/ScrollBox.h"
+#include "Runtime/UMG/Public/Components/TextBlock.h"
 #include "LobbyUserWidget.generated.h"
 
 /**
@@ -19,7 +21,12 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 		UButton* RoomListBtn = nullptr;
+	UPROPERTY(meta = (BindWidget))
+		UScrollBox* ListScrollBox = nullptr;
 
 	UFUNCTION()
 		void RoomListBtnClicked();
+
+	UFUNCTION()
+		void LoadRoomList(const FString& msg);
 };
