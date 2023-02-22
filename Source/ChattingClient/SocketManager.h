@@ -14,7 +14,11 @@
  */
 class CHATTINGCLIENT_API USocketManager
 {
-	enum { BUFFER_SIZE = 2048 };
+	enum 
+	{ 
+		BUFFER_SIZE = 2048, 
+		PORT = 1112
+	};
 
 private:
 	FSocket* socket;

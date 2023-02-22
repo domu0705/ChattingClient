@@ -9,7 +9,7 @@
 #include "Sockets.h"
 #include "SocketSubsystem.h"
 #include "Internationalization/Text.h"
-
+#include "Internationalization/Internationalization.h"
 USocketManager::USocketManager()
 {
 	port = 1112;
@@ -22,8 +22,29 @@ USocketManager::~USocketManager()
 
 void USocketManager::Send(FString& string)
 {
+	FString packetEnd = string;
+	packetEnd += "\n";
+	char message[BUFFER_SIZE];
+	const wchar_t* encode = *packetEnd;
+	char defaultSetting = '?';
+
+	int32 len = WideCharToMultiByte(CP_ACP, 0, encode, -1, NULL, 0, NULL, NULL);
+	WideCharToMultiByte(CP_ACP, 0, encode, -1, message, len, &defaultSetting, NULL);
+	int32 bytesSents = 0;
+
+	bool IsSended = socket->Send((uint8*)(message), len, bytesSents);
+
+	if (IsSended)
+	{
+		UE_LOG(LogTemp, Log, TEXT("Sended Message: %s"), *string);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Failed to send message"));
+	}
+	/*
 	setlocale(LC_ALL, "korean");
-	string += "\r\n";
+	string += TEXT("\r\n");
 
 	char c[1024];
 
@@ -46,6 +67,7 @@ void USocketManager::Send(FString& string)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Failed to send message"));
 	}
+	*/
 }
 
 void USocketManager::SendLogin(const FString& name)
@@ -64,7 +86,7 @@ bool USocketManager::ConnectServer()
 
 	TSharedRef<FInternetAddr> addr = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateInternetAddr();
 	addr->SetIp(ip.Value);
-	addr->SetPort(port);
+	addr->SetPort(PORT);
 
 	if (socket->Connect(*addr)) {
 		isConnected = true;
@@ -108,7 +130,7 @@ void USocketManager::Tick()
 		// Log the received string
 		UE_LOG(LogTemp, Log, TEXT("@@ReceivedString: %s"), *recvStr);
 
-
+		/*
 		if (recvStr.Contains("\r\n") == true)
 		{
 			TArray<FString> lines;
@@ -123,6 +145,7 @@ void USocketManager::Tick()
 				}
 			}
 		}
+		*/
 		memset(buffer, 0, BUFFER_SIZE);
 		recvBytes = 0;
 	}
