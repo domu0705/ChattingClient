@@ -21,14 +21,25 @@ USocketManager::~USocketManager()
 
 void USocketManager::Send(FString& string)
 {
+	setlocale(LC_ALL, "korean");
 	string += "\r\n";
+	/*
+	FTCHARToUTF8 Converter(*string);
+	TArray<uint8> msg;
+	msg.Append((uint8*)Converter.Get(), Converter.Length());
+	*/
+	char c[1024];
 
 	TArray<uint8> msg;
-	FTCHARToUTF8 Converter(*string);
-	msg.Append((uint8*)Converter.Get(), Converter.Length());
+	wchar_t* da = string.GetCharArray().GetData();
+	int len = wcstombs(c, da, 1024);
+	for (int i = 0; i < len; i++)
+	{
+		msg.Add(c[i]);
+	}
 
-	int32 ByteSent = 0;
-	bool IsSended = socket->Send(msg.GetData(), msg.Num(), ByteSent);
+	int32 sendingByte = 0;
+	bool IsSended = socket->Send(msg.GetData(), msg.Num(), sendingByte);
 
 	if (IsSended)
 	{
@@ -69,9 +80,60 @@ bool USocketManager::ConnectServer()
 
 }
 
+//actor에 존재하는 tick이 실행될때마다 이것도 함께 실행됨
+/*
+void USocketManager::Tick()
+{
+	uint32 pendingSize = 0;
+	if (!isConnected || !(socket->HasPendingData(pendingSize)))
+	{
+		return;
+	}
+
+	int curRecvBytes = 0;
+	bool isReceived = socket->Recv(buffer + recvBytes, BUFFER_SIZE - recvBytes, curRecvBytes);
+
+	if (isReceived)
+	{
+		recvBytes += curRecvBytes;
+
+
+		//wchar_t* pStr = MBTtoWideChar(buffer);
+
+		const FString& bufferToString = pStr;
+
+		if (pStr != nullptr)
+		{
+
+			if (bufferToString.Contains("\r\n") == true)
+			{
+				TArray<FString> lines;
+				bufferToString.ParseIntoArray(lines, TEXT("\r\n"));
+				if (lines.Num() > 0)
+				{
+					for (const FString& line : lines)
+					{
+						HandleRecv(line);
+					}
+					memset(buffer, 0, BUFFER_SIZE);
+					recvBytes = 0;
+				}
+			}
+			delete pStr;
+
+		}
+		else
+		{
+			memset(buffer, 0, BUFFER_SIZE);
+			RecvBytes = 0;
+		}
+	}
+}
+*/
+/*
 int USocketManager::WideCharToMBT(char* to, wchar_t* from)
 {
 	int len = WideCharToMultiByte(CP_ACP, 0, from, -1, NULL, 0, NULL, NULL);
 	WideCharToMultiByte(CP_ACP, 0, from, -1, to, len, NULL, NULL);
 	return len;
-}
+}*/

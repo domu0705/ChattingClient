@@ -11,10 +11,11 @@ void AChattingClientGameModeBase::StartPlay()
 	Super::StartPlay();
 	auto aa = GetWorld();
 
-	ChattingClientManager = new UChattingClientManager();
-	SocketManager = new USocketManager();
+	ChattingClientManager = UChattingClientManager::GetInstance(); // new UChattingClientManager();
+	SocketManager = USocketManager::GetInstance();// new USocketManager();
 	ChattingClientManager->SetSocket(SocketManager);
 	//GameInstance->SetSocketManager(SocketManager);
+
 }
 
 void AChattingClientGameModeBase::BeginPlay()
@@ -33,6 +34,13 @@ void AChattingClientGameModeBase::BeginPlay()
 	UserWidgetManager->CreateLogInView( GetWorld() );
 	UserWidgetManager->CreateLobbyView(GetWorld());
 }
+
+void AChattingClientGameModeBase::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+	//if (SocketManager != nullptr) SocketManager->Tick();
+}
+
 
 //endplay에서 UUserWidgetManager delete
 

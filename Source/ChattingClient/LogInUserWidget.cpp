@@ -53,7 +53,15 @@ void ULogInUserWidget::LogInBtnClicked()
 	int32 tempCnt = FCString::Atoi(*idStr);
 
 	UChattingClientManager* manager = UChattingClientManager::GetInstance();
-	USocketManager* socketManager = USocketManager::GetInstance();
+	if (!manager)
+		return;
+
+	USocketManager* socketManager = manager->GetSocket();
+	if (!socketManager)
+	{
+		UE_LOG(LogTemp, Log, TEXT("LogInBtnClicked() | !socketmanager fail"));
+		return;
+	}
 	
 	if (socketManager)
 	{

@@ -95,6 +95,7 @@ void UUserWidgetManager::OnOffLobbyView(bool isVIsible)
 	{
 		UE_LOG(LogTemp, Log, TEXT("@@@ OnOffLobbyView | true"));
 		LobbyUIObject->SetVisibility(ESlateVisibility::Visible);
+
 	}
 	else
 	{
