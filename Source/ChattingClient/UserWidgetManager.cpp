@@ -9,6 +9,7 @@
 #include "RoomUserWidget.h"
 #include "PrivateMsgUserWidget.h"
 #include "PopUpUserWidget.h"
+#include "SearchUserWidget.h"
 #include <UObject/ConstructorHelpers.h>
 
 //UI가 뷰포트에 추가되면(Add to ViewPort) 그 이후에 NativeContruct 함수가 호출
@@ -175,6 +176,33 @@ void UUserWidgetManager::CreatePopUpView(UWorld* world)
 	}
 }
 
+void UUserWidgetManager::CreateSearchView(UWorld* world)
+{
+	if (!world)
+		return;
+
+	UE_LOG(LogTemp, Log, TEXT("@@@ CreateSearchView"));
+
+	FString path = "/Game/BP_Search";
+	SearchUIClass = ConstructorHelpersInternal::FindOrLoadClass(path, USearchUserWidget::StaticClass());
+	if (!SearchUIClass)
+		return;
+
+	SearchUI = Cast<USearchUserWidget>(CreateWidget<UUserWidget>(world, SearchUIClass));
+	if (SearchUI)
+	{
+		SearchUI->AddToViewport();
+		FString title = TEXT("검색할 방 번호:");
+		OnOffSearchView(title,false);
+		UE_LOG(LogTemp, Log, TEXT("@@@ CreateSearchView success"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Log, TEXT("@@@ CreateSearchView  fail "));
+	}
+}
+
+
 void UUserWidgetManager::OnOffLogInView(bool isVIsible)
 {
 	if (!LoginUI)
@@ -292,6 +320,27 @@ void UUserWidgetManager::OnOffPopUpView(bool isVIsible)
 	else
 	{
 		PopUpUI->SetVisibility(ESlateVisibility::Collapsed);
+	}
+}
+
+void UUserWidgetManager::OnOffSearchView(FString& type, bool isVIsible)
+{
+	UE_LOG(LogTemp, Log, TEXT("@@@  UUserWidgetManager::OnOffSearchView()"));
+	if (!SearchUI)
+	{
+		UE_LOG(LogTemp, Log, TEXT("@@@  없음"));
+		return;
+	}
+
+	if (isVIsible)
+	{
+		UE_LOG(LogTemp, Log, TEXT("@@@  UUserWidgetManager::OnOffSearchView() | SetVisibility(ESlateVisibility::Visible)"));
+		SearchUI->LoadTitleMsg(type);
+		SearchUI->SetVisibility(ESlateVisibility::Visible);
+	}
+	else
+	{
+		SearchUI->SetVisibility(ESlateVisibility::Collapsed);
 	}
 }
 

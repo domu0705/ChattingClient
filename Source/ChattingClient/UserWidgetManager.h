@@ -17,6 +17,7 @@ class URoomOptionUserWidget;
 class URoomUserWidget;
 class UPrivateMsgUserWidget;
 class UPopUpUserWidget;
+class USearchUserWidget;
 
 class CHATTINGCLIENT_API UUserWidgetManager
 {
@@ -35,6 +36,7 @@ public:
 	void CreateRoomView(UWorld* world);
 	void CreatePrivateMsgView(UWorld* world);
 	void CreatePopUpView(UWorld* world);
+	void CreateSearchView(UWorld* world);
 
 	void OnOffLogInView(bool isVIsible);
 	void OnOffLobbyView(bool isVIsible);
@@ -42,6 +44,7 @@ public:
 	void OnOffRoomView(bool isVisible);
 	void OnOffPrivateMsgView(bool isVisible);
 	void OnOffPopUpView(bool isVisible);
+	void OnOffSearchView(FString& type, bool isVisible);
 	void UpdateList(const FString& msg);
 	void UpdateChatList(FString& msg);
 	void UpdatePopUp(const FString& msg);
@@ -56,6 +59,7 @@ private:
 	TSubclassOf<UUserWidget> RoomUIClass;
 	TSubclassOf<UUserWidget>PrivateMsgUIClass;
 	TSubclassOf<UUserWidget>PopUpUIClass;
+	TSubclassOf<UUserWidget>SearchUIClass;
 
 	ULogInUserWidget* LoginUI;
 	ULobbyUserWidget* LobbyUI;
@@ -63,6 +67,7 @@ private:
 	URoomUserWidget* RoomUI;
 	UPrivateMsgUserWidget* PrivateMsgUI;
 	UPopUpUserWidget* PopUpUI;
+	USearchUserWidget* SearchUI;
 
 	UChattingClientManager* manager;
 	//TSharedPtr<UUserWidget> LoginUIObject;

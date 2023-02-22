@@ -44,12 +44,14 @@ void USocketManager::Send(FString& string)
 	}
 }
 
+//로그인 요청
 void USocketManager::SendLogin(const FString& name)
 {
 	FString command = FString::Printf(TEXT("LOGIN %s\r\n"), *name);//name이 추가되며 공백이 생겨 뒤에 두개 무시
 	Send(command);
 }
 
+//방 정보 리스트 요청
 void USocketManager::SendRoomList()
 {
 	UE_LOG(LogTemp, Log, TEXT("USocketManager::SendRoomList()"));
@@ -57,6 +59,7 @@ void USocketManager::SendRoomList()
 	Send(command);
 }
 
+//유저 정보 리스트 요청
 void USocketManager::SendUserList()
 {
 	UPlayerInfo* PlayerInfo = UChattingClientManager::GetInstance()->GetPlayerInfo();
@@ -66,6 +69,7 @@ void USocketManager::SendUserList()
 	Send(command);
 }
 
+//방 나가기 요청
 void USocketManager::SendQuitRoom()
 {
 	UE_LOG(LogTemp, Log, TEXT("USocketManager::SendQuitRoom()"));
@@ -78,6 +82,7 @@ void USocketManager::SendQuitRoom()
 	Send(command);
 }
 
+//방 생성 요청
 void USocketManager::SendCreateRoom(const FString& num, const FString& name)
 {
 	UPlayerInfo* PlayerInfo = UChattingClientManager::GetInstance()->GetPlayerInfo();
@@ -87,6 +92,7 @@ void USocketManager::SendCreateRoom(const FString& num, const FString& name)
 	Send(command);
 }
 
+//쪽지 보내기 요청
 void USocketManager::SendPrivateMsg(const FString& name, const FString& msg)
 {
 	UPlayerInfo* PlayerInfo = UChattingClientManager::GetInstance()->GetPlayerInfo();
@@ -96,6 +102,28 @@ void USocketManager::SendPrivateMsg(const FString& name, const FString& msg)
 	Send(command);
 }
 
+
+//방 정보 요청
+void USocketManager::SendRoomInfo(const FString& num)
+{
+	UPlayerInfo* PlayerInfo = UChattingClientManager::GetInstance()->GetPlayerInfo();
+	PlayerInfo->SetPacketFlag(UPlayerInfo::ROOM_INFO);
+	UE_LOG(LogTemp, Log, TEXT("USocketManager::SendRoomInfo()"));
+	FString command = FString::Printf(TEXT("ST %s\n"), *num);
+	Send(command);
+}
+
+//유저 정보 요청
+void USocketManager::SendUserInfo(const FString& name)
+{
+	UPlayerInfo* PlayerInfo = UChattingClientManager::GetInstance()->GetPlayerInfo();
+	PlayerInfo->SetPacketFlag(UPlayerInfo::USER_INFO);
+	UE_LOG(LogTemp, Log, TEXT("USocketManager::SendUserInfo()"));
+	FString command = FString::Printf(TEXT("PF %s\n"), *name);
+	Send(command);
+}
+
+//지정된 주소로 연결
 bool USocketManager::ConnectServer()
 {
 	socket = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateSocket(TEXT("Stream"), TEXT("Client Socket"));
@@ -118,8 +146,7 @@ bool USocketManager::ConnectServer()
 
 }
 
-//actor에 존재하는 tick이 실행될때마다 이것도 함께 실행됨
-
+//서버로 부터 오는 정보 수신
 void USocketManager::Tick()
 {
 	uint32 pendingSize = 0;
@@ -161,7 +188,6 @@ void USocketManager::Tick()
 				{
 					
 					//UE_LOG(LogTemp, Log, TEXT("@@one line : %s"), *line);
-
 				}
 			}
 		}
@@ -171,9 +197,9 @@ void USocketManager::Tick()
 	}
 }
 
+//수신한 메시지 해석
 void USocketManager::CheckRecvMsg(FString& recvStr, FString& str1)
 {
-	UE_LOG(LogTemp, Log, TEXT("@@@@@@@@@@@@@@@@@@@@USocketManager::CheckRecvMsg: %s"), *recvStr);
 	UChattingClientManager*manager = UChattingClientManager::GetInstance();
 	if (!manager)
 		return;
@@ -191,8 +217,9 @@ void USocketManager::CheckRecvMsg(FString& recvStr, FString& str1)
 	
 	if (curPacketFlag == UPlayerInfo::WAIT_PRIVATE_MSG)//쪽지 보내기
 	{
-		if(str1.Contains(TEXT("보냈습니다")) == true)
-		//귓말 갔다는 팝업
+		UIManager->UpdatePopUp(recvStr);
+		UIManager->OnOffPopUpView(true);
+		PlayerInfo->SetPacketFlag(UPlayerInfo::NON);
 		return;
 	}
 	if (str1.Contains(TEXT("# ")) == true)//쪽지 받기
@@ -218,7 +245,6 @@ void USocketManager::CheckRecvMsg(FString& recvStr, FString& str1)
 	}
 	else if (curState == UPlayerInfo::LOBBY)
 	{
-		UE_LOG(LogTemp, Log, TEXT("LOBBY 입장!!!!!!!!!!!!!!!"));
 		if (curPacketFlag == UPlayerInfo::USER_LIST)
 		{
 			UIManager->UpdateList(recvStr);
@@ -230,11 +256,17 @@ void USocketManager::CheckRecvMsg(FString& recvStr, FString& str1)
 		}
 		else if (curPacketFlag == UPlayerInfo::ROOM_INFO)
 		{
-
+			UE_LOG(LogTemp, Log, TEXT("ROOM_INFO pop up"));
+			UIManager->UpdatePopUp(recvStr);
+			UIManager->OnOffPopUpView(true);
+			PlayerInfo->SetPacketFlag(UPlayerInfo::NON);
 		}
 		else if (curPacketFlag == UPlayerInfo::USER_INFO)
 		{
-
+			UE_LOG(LogTemp, Log, TEXT("USER_INFO pop up"));
+			UIManager->UpdatePopUp(recvStr);
+			UIManager->OnOffPopUpView(true);
+			PlayerInfo->SetPacketFlag(UPlayerInfo::NON);
 		}
 		else if (curPacketFlag == UPlayerInfo::WAIT_ROOM_CREATION)
 		{

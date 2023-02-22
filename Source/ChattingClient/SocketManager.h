@@ -48,6 +48,8 @@ public:
 	void SendQuitRoom();
 	void SendCreateRoom(const FString& num, const FString& name);
 	void SendPrivateMsg(const FString& name, const FString& msg);
+	void SendRoomInfo(const FString& num);
+	void SendUserInfo(const FString& name);
 	void CheckRecvMsg(FString& recvStr, FString& str1);
 	int WideCharToMBT(char* from, wchar_t* to);
 

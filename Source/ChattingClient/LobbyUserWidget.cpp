@@ -18,6 +18,18 @@ void ULobbyUserWidget::NativeConstruct()
 	if (!CreateRoomBtn)
 		return;
 	CreateRoomBtn->OnClicked.AddDynamic(this, &ULobbyUserWidget::CreateRoomBtnClicked);
+	if (!JoinRoomBtn)
+		return;
+	JoinRoomBtn->OnClicked.AddDynamic(this, &ULobbyUserWidget::JoinRoomBtnClicked);
+
+
+	if (!RoomInfoBtn)
+		return;
+	RoomInfoBtn->OnClicked.AddDynamic(this, &ULobbyUserWidget::RoomInfoBtnClicked);
+	if (!UserInfoBtn)
+		return;
+	UserInfoBtn->OnClicked.AddDynamic(this, &ULobbyUserWidget::UserInfoBtnClicked);
+
 	if (!PrivateMsgBtn)
 		return;
 	PrivateMsgBtn->OnClicked.AddDynamic(this, &ULobbyUserWidget::PrivateMsgBtnClicked);
@@ -44,8 +56,31 @@ void ULobbyUserWidget::CreateRoomBtnClicked()
 	UUserWidgetManager* UImanager = UUserWidgetManager::GetInstance();
 
 	UImanager->OnOffRoomOptionView(true);
+}
+
+void ULobbyUserWidget::JoinRoomBtnClicked()
+{
 
 }
+
+void ULobbyUserWidget::RoomInfoBtnClicked()
+{
+	UE_LOG(LogTemp, Log, TEXT(" ULobbyUserWidget:: RoomInfoBtnClicked버튼 시작@@@@"));
+	UUserWidgetManager* UImanager = UUserWidgetManager::GetInstance();
+
+	FString text = TEXT("검색할 방 번호 입력");
+	UImanager->OnOffSearchView(text, true);
+}
+
+void ULobbyUserWidget::UserInfoBtnClicked()
+{
+	UE_LOG(LogTemp, Log, TEXT(" ULobbyUserWidget:: UserInfoBtnClicked버튼 시작@@@@"));
+	UUserWidgetManager* UImanager = UUserWidgetManager::GetInstance();
+
+	FString text = TEXT("검색할 ID 입력");
+	UImanager->OnOffSearchView(text,true);
+}
+
 
 void ULobbyUserWidget::PrivateMsgBtnClicked()
 {

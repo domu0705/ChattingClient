@@ -45,6 +45,7 @@ void AChattingClientGameModeBase::BeginPlay()
 	UserWidgetManager->CreateRoomView(GetWorld());
 	UserWidgetManager->CreatePrivateMsgView(GetWorld());
 	UserWidgetManager->CreatePopUpView(GetWorld());
+	UserWidgetManager->CreateSearchView(GetWorld());
 	PlayerInfo = UPlayerInfo::GetInstance();
 	PlayerInfo->ResetInfo();
 }
