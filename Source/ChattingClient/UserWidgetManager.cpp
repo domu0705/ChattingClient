@@ -8,6 +8,7 @@
 #include "RoomUserWidget.h"
 #include "RoomUserWidget.h"
 #include "PrivateMsgUserWidget.h"
+#include "PopUpUserWidget.h"
 #include <UObject/ConstructorHelpers.h>
 
 //UI가 뷰포트에 추가되면(Add to ViewPort) 그 이후에 NativeContruct 함수가 호출
@@ -149,6 +150,31 @@ void UUserWidgetManager::CreatePrivateMsgView(UWorld* world)
 	}
 }
 
+void UUserWidgetManager::CreatePopUpView(UWorld* world)
+{
+	if (!world)
+		return;
+
+	UE_LOG(LogTemp, Log, TEXT("@@@ CreatePopUpView"));
+
+	FString path = "/Game/BP_PopUp";
+	PopUpUIClass = ConstructorHelpersInternal::FindOrLoadClass(path, UPopUpUserWidget::StaticClass());
+	if (!PopUpUIClass)
+		return;
+
+	PopUpUI = Cast<UPopUpUserWidget>(CreateWidget<UUserWidget>(world, PopUpUIClass));
+	if (PopUpUI)
+	{
+		PopUpUI->AddToViewport();
+		OnOffPopUpView(false);
+		UE_LOG(LogTemp, Log, TEXT("@@@ CreateRoomView success"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Log, TEXT("@@@ CreateRoomView  fail "));
+	}
+}
+
 void UUserWidgetManager::OnOffLogInView(bool isVIsible)
 {
 	if (!LoginUI)
@@ -247,6 +273,34 @@ void UUserWidgetManager::OnOffPrivateMsgView(bool isVIsible)
 	{
 		PrivateMsgUI->SetVisibility(ESlateVisibility::Collapsed);
 	}
+}
+
+void UUserWidgetManager::OnOffPopUpView(bool isVIsible)
+{
+	UE_LOG(LogTemp, Log, TEXT("@@@  UUserWidgetManager::OnOffPopUpView()"));
+	if (!PopUpUI)
+	{
+		UE_LOG(LogTemp, Log, TEXT("@@@  없음"));
+		return;
+	}
+
+	if (isVIsible)
+	{
+		UE_LOG(LogTemp, Log, TEXT("@@@  UUserWidgetManager::PopUpUI() | SetVisibility(ESlateVisibility::Visible)"));
+		PopUpUI->SetVisibility(ESlateVisibility::Visible);
+	}
+	else
+	{
+		PopUpUI->SetVisibility(ESlateVisibility::Collapsed);
+	}
+}
+
+//팝업 메세지 갱신
+void  UUserWidgetManager::UpdatePopUp(const FString& msg)
+{
+	UE_LOG(LogTemp, Log, TEXT("@@@ UUserWidgetManager::UpdateRoomList %s"), *msg);
+	PopUpUI->LoadPopUpMsg(msg);
+	//LoadPopUpMsg
 }
 
 void UUserWidgetManager::UpdateList(const FString& msg)

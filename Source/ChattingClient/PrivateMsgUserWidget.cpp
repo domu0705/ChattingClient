@@ -36,6 +36,7 @@ void UPrivateMsgUserWidget::SendBtnClicked()
 	}
 
 	socketManager->SendPrivateMsg(dest, msg);
+	CloseBtnClicked();
 }
 
 void UPrivateMsgUserWidget::CloseBtnClicked()

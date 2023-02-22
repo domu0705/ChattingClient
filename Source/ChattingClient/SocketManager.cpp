@@ -189,12 +189,19 @@ void USocketManager::CheckRecvMsg(FString& recvStr, FString& str1)
 	UPlayerInfo::State curState = UPlayerInfo::State(PlayerInfo->GetPlayerState());
 	UPlayerInfo::Packet curPacketFlag = UPlayerInfo::Packet(PlayerInfo->GetPacketFlag());
 	
-	if (curPacketFlag == UPlayerInfo::WAIT_PRIVATE_MSG)//귓속말
+	if (curPacketFlag == UPlayerInfo::WAIT_PRIVATE_MSG)//쪽지 보내기
 	{
+		if(str1.Contains(TEXT("보냈습니다")) == true)
 		//귓말 갔다는 팝업
 		return;
 	}
-	
+	if (str1.Contains(TEXT("# ")) == true)//쪽지 받기
+	{
+		UIManager->UpdatePopUp(recvStr);
+		UIManager->OnOffPopUpView(true);
+		return;
+	}
+
 	if(curState == UPlayerInfo::WAITING)
 	{
 		if (str1.Contains("------") == true)//로그인 성공
