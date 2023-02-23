@@ -116,5 +116,7 @@ void ULobbyUserWidget::LoadList(const FString& msg)
 
 	UTextBlock* NewTextBlock = NewObject<UTextBlock>(ListScrollBox);
 	NewTextBlock->SetText(FText::FromString(msg));
+	FLinearColor NewColor = FLinearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	NewTextBlock->SetColorAndOpacity(NewColor);
 	ListScrollBox->AddChild(NewTextBlock);
 }
