@@ -97,6 +97,17 @@ void USocketManager::SendQuitRoom()
 	Send(command);
 }
 
+//채팅시스템 종료 요청
+void USocketManager::SendQuitSystem()
+{
+	UE_LOG(LogTemp, Log, TEXT("USocketManager::SendQuitSystem()"));
+	UPlayerInfo* PlayerInfo = UChattingClientManager::GetInstance()->GetPlayerInfo();
+	if (!PlayerInfo)
+		return;
+	PlayerInfo->SetPacketFlag(UPlayerInfo::LOGOUT_WAIT);
+	FString command = FString::Printf(TEXT("X\n"));
+	Send(command);
+}
 //방 생성 요청
 void USocketManager::SendCreateRoom(const FString& num, const FString& name)
 {
@@ -338,9 +349,17 @@ void USocketManager::CheckRecvMsg(FString& recvStr, FString& str1)
 		}
 		UIManager->UpdateChatList(recvStr);
 	}
-	else if (curState == UPlayerInfo::LOGOUT)
+	else if (curPacketFlag == UPlayerInfo::LOGOUT_WAIT)
 	{
-
+		if (str1.Contains(TEXT("---")) == true)//종료 성공
+		{
+			UE_LOG(LogTemp, Log, TEXT("success system exit"));
+			FGenericPlatformMisc::RequestExit(false);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Log, TEXT("fail system exit"));
+		}
 	}
 	else //
 	{

@@ -33,6 +33,10 @@ void ULobbyUserWidget::NativeConstruct()
 	if (!PrivateMsgBtn)
 		return;
 	PrivateMsgBtn->OnClicked.AddDynamic(this, &ULobbyUserWidget::PrivateMsgBtnClicked);
+
+	if (!QuitBtn)
+		return;
+	QuitBtn->OnClicked.AddDynamic(this, &ULobbyUserWidget::QuitBtnClicked);
 }
 
 //방 리스트 버튼 클릭
@@ -92,7 +96,16 @@ void ULobbyUserWidget::PrivateMsgBtnClicked()
 	UUserWidgetManager* UImanager = UUserWidgetManager::GetInstance();
 
 	UImanager->OnOffPrivateMsgView(true);
+}
 
+//로비 나가기
+void ULobbyUserWidget::QuitBtnClicked()
+{
+	UE_LOG(LogTemp, Log, TEXT(" ULobbyUserWidget::QuitBtnClicked()"));
+
+	UChattingClientManager* manager = UChattingClientManager::GetInstance();
+	manager->GetSocket()->SendQuitSystem();
+	UKismetSystemLibrary::QuitGame(this, 0, EQuitPreference::Quit, false);
 }
 
 //방 리스트 정보 텍스트 갱신

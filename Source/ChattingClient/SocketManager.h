@@ -48,6 +48,7 @@ public:
 	void SendUserList();
 	void SendJoinRoom(const FString& name);
 	void SendQuitRoom();
+	void SendQuitSystem();
 	void SendCreateRoom(const FString& num, const FString& name);
 	void SendPrivateMsg(const FString& name, const FString& msg);
 	void SendRoomInfo(const FString& num);

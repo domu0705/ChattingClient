@@ -52,7 +52,6 @@ public:
 	//virtual void BeginPlay() override; 여기 이거 못씀
 
 private:
-	USocketManager* GetPacketmanager();
 	TSubclassOf<UUserWidget> LoginUIClass;
 	TSubclassOf<UUserWidget> LobbyUIClass;
 	TSubclassOf<UUserWidget> RoomOptionUIClass;

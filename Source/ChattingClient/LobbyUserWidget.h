@@ -10,6 +10,8 @@
 #include "Runtime/UMG/Public/Components/TextBlock.h"
 #include "ChattingClientManager.h"
 #include "SocketManager.h"
+//#include "GenericPlatform/GenericPlatformMisc.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "LobbyUserWidget.generated.h"
 
 /**
@@ -37,6 +39,8 @@ public:
 	UPROPERTY(meta = (BindWidget))
 		UButton* UserInfoBtn = nullptr;
 	UPROPERTY(meta = (BindWidget))
+		UButton* QuitBtn = nullptr;
+	UPROPERTY(meta = (BindWidget))
 		UScrollBox* ListScrollBox = nullptr;
 
 
@@ -57,4 +61,6 @@ public:
 
 	UFUNCTION()
 		void LoadList(const FString& msg);
+	UFUNCTION()
+		void QuitBtnClicked();
 };
