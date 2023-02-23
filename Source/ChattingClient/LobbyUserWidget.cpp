@@ -39,62 +39,54 @@ void ULobbyUserWidget::NativeConstruct()
 	QuitBtn->OnClicked.AddDynamic(this, &ULobbyUserWidget::QuitBtnClicked);
 }
 
-//방 리스트 버튼 클릭
+//모든 채팅방 정보 요청
 void ULobbyUserWidget::RoomListBtnClicked()
 {
-	UE_LOG(LogTemp, Log, TEXT(" ULobbyUserWidget::RoomListBtnClicked버튼 시작@@@@"));
 	UChattingClientManager* manager = UChattingClientManager::GetInstance();
 	manager->GetSocket()->SendRoomList();
 }
 
+//모든 유저 정보 요청
 void ULobbyUserWidget::UserListBtnClicked()
 {
-	UE_LOG(LogTemp, Log, TEXT(" ULobbyUserWidget::UserListBtnClicked버튼 시작@@@@"));
 	UChattingClientManager* manager = UChattingClientManager::GetInstance();
 	manager->GetSocket()->SendUserList();
 }
 
+//방 생성 팝업 요청
 void ULobbyUserWidget::CreateRoomBtnClicked()
 {
-	UE_LOG(LogTemp, Log, TEXT(" ULobbyUserWidget:: CreateRoomBtnClicked버튼 시작@@@@"));
 	UUserWidgetManager* UImanager = UUserWidgetManager::GetInstance();
-
 	UImanager->OnOffRoomOptionView(true);
 }
 
 void ULobbyUserWidget::JoinRoomBtnClicked()
 {
-	UE_LOG(LogTemp, Log, TEXT(" ULobbyUserWidget:: JoinRoomBtnClicked버튼 시작@@@@"));
 	UUserWidgetManager* UImanager = UUserWidgetManager::GetInstance();
-
 	FString text = TEXT("참여할 방 번호 : ");
 	UImanager->OnOffSearchView(text, true);
 }
 
+//방 검색창 보여주기
 void ULobbyUserWidget::RoomInfoBtnClicked()
 {
-	UE_LOG(LogTemp, Log, TEXT(" ULobbyUserWidget:: RoomInfoBtnClicked버튼 시작@@@@"));
 	UUserWidgetManager* UImanager = UUserWidgetManager::GetInstance();
-
 	FString text = TEXT("검색할 방 번호 : ");
 	UImanager->OnOffSearchView(text, true);
 }
 
+//아이디 검색창 보여주기
 void ULobbyUserWidget::UserInfoBtnClicked()
 {
-	UE_LOG(LogTemp, Log, TEXT(" ULobbyUserWidget:: UserInfoBtnClicked버튼 시작@@@@"));
 	UUserWidgetManager* UImanager = UUserWidgetManager::GetInstance();
-
 	FString text = TEXT("검색할 ID :");
 	UImanager->OnOffSearchView(text,true);
 }
 
-
+//쪽지 생성 팝업 보여주기
 void ULobbyUserWidget::PrivateMsgBtnClicked()
 {
-	UE_LOG(LogTemp, Log, TEXT(" ULobbyUserWidget:: PrivateMsgBtnClicked버튼 시작@@@@"));
 	UUserWidgetManager* UImanager = UUserWidgetManager::GetInstance();
-
 	UImanager->OnOffPrivateMsgView(true);
 }
 

@@ -6,6 +6,7 @@
 #include "SocketManager.h"
 #include "PlayerInfo.h"
 
+
 UChattingClientManager::UChattingClientManager()
 {
 }
@@ -18,8 +19,6 @@ void  UChattingClientManager::SetSocket(USocketManager* socketManager)
 {
 	if (!socketManager)
 		return;
-
-	UE_LOG(LogTemp, Log, TEXT("SetSocket success @@@@@@@@@@@@@@"));
 	SocketManager = socketManager;
 }
 
@@ -28,7 +27,6 @@ void  UChattingClientManager::SetUserWidgetManager(UUserWidgetManager* userWidge
 {
 	UserWidgetManager = userWidgettManager;
 }
-
 
 USocketManager* UChattingClientManager::GetSocket()
 {
@@ -39,8 +37,6 @@ void  UChattingClientManager::SetPlayerInfo(UPlayerInfo* playerInfo)
 {
 	if (!playerInfo)
 		return;
-
-	UE_LOG(LogTemp, Log, TEXT("@@@ UChattingClientManager::SetPlayerInfo() | playerInfo"));
 	PlayerInfo = playerInfo;
 }
 
@@ -48,10 +44,3 @@ UPlayerInfo* UChattingClientManager::GetPlayerInfo()
 {
 	return PlayerInfo;
 }
-
-/*
-UUserWidgetManager* UChattingClientManager::GetUserWidgetManager()
-{
-	return UserWidgetManager;
-}
-*/

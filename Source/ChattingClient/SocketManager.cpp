@@ -179,10 +179,9 @@ bool USocketManager::ConnectServer()
 	{
 		return false;
 	}
-
 }
 
-//서버로 부터 오는 정보 수신
+//서버로부터 정보가 오는지 확인
 void USocketManager::Tick()
 {
 	uint32 pendingSize = 0;
@@ -195,7 +194,6 @@ void USocketManager::Tick()
 	if (isReceived)
 	{
 		recvBytes += curRecvBytes;
-		UE_LOG(LogTemp, Log, TEXT("recvBytes %d"), recvBytes);
 
 		if (curRecvBytes <= 0)
 		{
@@ -205,12 +203,8 @@ void USocketManager::Tick()
 			return;
 		}
 
-		//한글 받아지는 변환
+		//한글 받아지도록 변환
 		FString recvStr = FString(UTF8_TO_TCHAR((const ANSICHAR*)buffer));
-
-		// Log the received string
-		UE_LOG(LogTemp, Log, TEXT("@@ReceivedString: %s"), *recvStr);
-
 		
 		if (recvStr.Contains("\r\n") == true)
 		{
