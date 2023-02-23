@@ -59,13 +59,29 @@ void USocketManager::SendRoomList()
 	Send(command);
 }
 
+void USocketManager::SendRoomChat(const FString& chat)
+{
+	UE_LOG(LogTemp, Log, TEXT("USocketManager::SendRoomChat()"));
+	FString command = FString::Printf(TEXT("%s\n"),*chat);//TEXT("LT\r\n");
+	Send(command);
+}
+
 //유저 정보 리스트 요청
 void USocketManager::SendUserList()
 {
 	UPlayerInfo* PlayerInfo = UChattingClientManager::GetInstance()->GetPlayerInfo();
 	PlayerInfo->SetPacketFlag(UPlayerInfo::USER_LIST);
 	UE_LOG(LogTemp, Log, TEXT("USocketManager::SendUserList()"));
-	FString command = FString::Printf(TEXT("US\n"));//TEXT("LT\r\n");
+	FString command = FString::Printf(TEXT("US\n"));
+	Send(command);
+}
+
+void USocketManager::SendJoinRoom(const FString& name)
+{
+	UPlayerInfo* PlayerInfo = UChattingClientManager::GetInstance()->GetPlayerInfo();
+	PlayerInfo->SetPacketFlag(UPlayerInfo::WAIT_JOIN);
+	UE_LOG(LogTemp, Log, TEXT("USocketManager::SendUserList()"));
+	FString command = FString::Printf(TEXT("J %s\n"),*name);
 	Send(command);
 }
 
@@ -76,8 +92,7 @@ void USocketManager::SendQuitRoom()
 	UPlayerInfo* PlayerInfo = UChattingClientManager::GetInstance()->GetPlayerInfo();
 	if (!PlayerInfo)
 		return;
-	PlayerInfo->SetPlayerState(UPlayerInfo::LOBBY);
-	PlayerInfo->SetPacketFlag(UPlayerInfo::NON);
+	PlayerInfo->SetPacketFlag(UPlayerInfo::QUIT_WAIT);
 	FString command = FString::Printf(TEXT("Q\n"));
 	Send(command);
 }
@@ -268,6 +283,27 @@ void USocketManager::CheckRecvMsg(FString& recvStr, FString& str1)
 			UIManager->OnOffPopUpView(true);
 			PlayerInfo->SetPacketFlag(UPlayerInfo::NON);
 		}
+		else if (curPacketFlag == UPlayerInfo::WAIT_JOIN)//방 참여 대기
+		{
+			if (str1.Contains(TEXT("들어오셨습니다")) == true)//방 참여 성공
+			{
+				UE_LOG(LogTemp, Log, TEXT("success room join"));
+				PlayerInfo->SetPlayerState(UPlayerInfo::ROOM);
+				PlayerInfo->SetPacketFlag(UPlayerInfo::NON);
+				UIManager->OnOffLobbyView(false);
+				FString title = TEXT("검색할 방 번호:");
+				UIManager->OnOffSearchView(title,false);
+				UIManager->OnOffRoomView(true);
+				UIManager->UpdateChatList(recvStr);
+			}
+			else
+			{
+				UE_LOG(LogTemp, Log, TEXT("fail room join"));
+				UIManager->UpdatePopUp(recvStr);
+				UIManager->OnOffPopUpView(true);
+				PlayerInfo->SetPacketFlag(UPlayerInfo::NON);
+			}
+		}
 		else if (curPacketFlag == UPlayerInfo::WAIT_ROOM_CREATION)
 		{
 			UE_LOG(LogTemp, Log, TEXT("room creation result %s"), *str1);
@@ -275,6 +311,7 @@ void USocketManager::CheckRecvMsg(FString& recvStr, FString& str1)
 			{
 				UE_LOG(LogTemp, Log, TEXT("success room creation"));
 				PlayerInfo->SetPlayerState(UPlayerInfo::ROOM);
+				PlayerInfo->SetPacketFlag(UPlayerInfo::NON);
 				UIManager->OnOffLobbyView(false);
 				UIManager->OnOffRoomOptionView(false);
 				UIManager->OnOffRoomView(true);
@@ -283,11 +320,22 @@ void USocketManager::CheckRecvMsg(FString& recvStr, FString& str1)
 			else
 			{
 				UE_LOG(LogTemp, Log, TEXT("fail room creation"));
+				UIManager->UpdatePopUp(recvStr);
+				UIManager->OnOffPopUpView(true);
+				PlayerInfo->SetPacketFlag(UPlayerInfo::NON);
 			}
 		}
 	}
 	else if (curState == UPlayerInfo::ROOM)
 	{
+		if (curPacketFlag == UPlayerInfo::QUIT_WAIT)
+		{
+			UIManager->OnOffRoomView(false);
+			UIManager->OnOffLobbyView(true);
+			PlayerInfo->SetPlayerState(UPlayerInfo::LOBBY);
+			PlayerInfo->SetPacketFlag(UPlayerInfo::ROOM_LIST);
+			return;
+		}
 		UIManager->UpdateChatList(recvStr);
 	}
 	else if (curState == UPlayerInfo::LOGOUT)

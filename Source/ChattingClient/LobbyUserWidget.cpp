@@ -60,7 +60,11 @@ void ULobbyUserWidget::CreateRoomBtnClicked()
 
 void ULobbyUserWidget::JoinRoomBtnClicked()
 {
+	UE_LOG(LogTemp, Log, TEXT(" ULobbyUserWidget:: JoinRoomBtnClicked버튼 시작@@@@"));
+	UUserWidgetManager* UImanager = UUserWidgetManager::GetInstance();
 
+	FString text = TEXT("참여할 방 번호 입력");
+	UImanager->OnOffSearchView(text, true);
 }
 
 void ULobbyUserWidget::RoomInfoBtnClicked()

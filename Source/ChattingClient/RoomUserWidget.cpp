@@ -19,22 +19,24 @@ void URoomUserWidget::NativeConstruct()
 
 void URoomUserWidget::SendBtnClicked()
 {
-	UE_LOG(LogTemp, Log, TEXT(" ULobbyUserWidget::RoomListBtnClicked버튼 시작@@@@"));
+	UE_LOG(LogTemp, Log, TEXT(" ULobbyUserWidget::SendBtnClicked버튼 시작@@@@"));
+	FString chat = (ChatEditText->GetText()).ToString();
+
 	UChattingClientManager* manager = UChattingClientManager::GetInstance();
-	manager->GetSocket()->SendRoomList();
+	manager->GetSocket()->SendRoomChat(chat);
+	//ChatEditText->SetEditableText();
+	ChatEditText->SetText(FText::FromString(""));
 }
 
 
 void URoomUserWidget::QuitBtnClicked()
 {
 	UE_LOG(LogTemp, Log, TEXT(" ULobbyUserWidget::QuitBtnClicked()"));
-	UUserWidgetManager* UImanager = UUserWidgetManager::GetInstance();
-	UImanager->OnOffRoomView(false);
-	UImanager->OnOffLobbyView(true);
 
 	UChattingClientManager* manager = UChattingClientManager::GetInstance();
 	manager->GetSocket()->SendQuitRoom();
 	chatLog = TEXT("");
+	ChatEditText->SetText(FText::FromString(""));
 }
 
 void URoomUserWidget::LoadChat(FString& msg)

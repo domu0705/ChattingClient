@@ -23,12 +23,14 @@ public:
         USER_LIST,
         ROOM_LIST,
         ROOM_INFO,
+        WAIT_JOIN,
         USER_INFO,
         SEND_NOTE,//쪽지 보내기
         CREATE_ROOM,
         JOIN_ROOM,
         WAIT_ROOM_CREATION,
         WAIT_PRIVATE_MSG,
+        QUIT_WAIT,
         X,
     };
 

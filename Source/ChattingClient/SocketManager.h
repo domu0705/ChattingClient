@@ -44,7 +44,9 @@ public:
 	void Send(FString& string);
 	void SendLogin(const FString& name);
 	void SendRoomList();
+	void SendRoomChat(const FString& chat);
 	void SendUserList();
+	void SendJoinRoom(const FString& name);
 	void SendQuitRoom();
 	void SendCreateRoom(const FString& num, const FString& name);
 	void SendPrivateMsg(const FString& name, const FString& msg);
