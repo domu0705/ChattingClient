@@ -67,7 +67,7 @@ void ULobbyUserWidget::JoinRoomBtnClicked()
 	UE_LOG(LogTemp, Log, TEXT(" ULobbyUserWidget:: JoinRoomBtnClicked버튼 시작@@@@"));
 	UUserWidgetManager* UImanager = UUserWidgetManager::GetInstance();
 
-	FString text = TEXT("참여할 방 번호 입력");
+	FString text = TEXT("참여할 방 번호 : ");
 	UImanager->OnOffSearchView(text, true);
 }
 
@@ -76,7 +76,7 @@ void ULobbyUserWidget::RoomInfoBtnClicked()
 	UE_LOG(LogTemp, Log, TEXT(" ULobbyUserWidget:: RoomInfoBtnClicked버튼 시작@@@@"));
 	UUserWidgetManager* UImanager = UUserWidgetManager::GetInstance();
 
-	FString text = TEXT("검색할 방 번호 입력");
+	FString text = TEXT("검색할 방 번호 : ");
 	UImanager->OnOffSearchView(text, true);
 }
 
@@ -85,7 +85,7 @@ void ULobbyUserWidget::UserInfoBtnClicked()
 	UE_LOG(LogTemp, Log, TEXT(" ULobbyUserWidget:: UserInfoBtnClicked버튼 시작@@@@"));
 	UUserWidgetManager* UImanager = UUserWidgetManager::GetInstance();
 
-	FString text = TEXT("검색할 ID 입력");
+	FString text = TEXT("검색할 ID :");
 	UImanager->OnOffSearchView(text,true);
 }
 

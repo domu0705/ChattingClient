@@ -97,6 +97,16 @@ void USocketManager::SendQuitRoom()
 	Send(command);
 }
 
+void USocketManager::SendDeleteRoom()
+{
+	UPlayerInfo* PlayerInfo = UChattingClientManager::GetInstance()->GetPlayerInfo();
+	if (!PlayerInfo)
+		return;
+	PlayerInfo->SetPacketFlag(UPlayerInfo::DEL_WAIT);
+	FString command = FString::Printf(TEXT("DEL\n"));
+	Send(command);
+}
+
 //채팅시스템 종료 요청
 void USocketManager::SendQuitSystem()
 {
@@ -208,7 +218,6 @@ void USocketManager::Tick()
 			recvStr.ParseIntoArray(lines, TEXT("\r\n"));
 			if (lines.Num() > 0)
 			{
-				//UE_LOG(LogTemp, Log, TEXT("@@ lines Num: %d"), lines.Num());
 				CheckRecvMsg(recvStr ,lines[0]);
 				for (const FString& line : lines)
 				{
@@ -254,7 +263,16 @@ void USocketManager::CheckRecvMsg(FString& recvStr, FString& str1)
 		UIManager->OnOffPopUpView(true);
 		return;
 	}
-
+	if (str1.Contains(TEXT("폭파되었습니다")) == true)//타인에 의해 방 폭파됨
+	{
+		UIManager->UpdatePopUp(recvStr);
+		UIManager->OnOffPopUpView(true);
+		UIManager->OnOffRoomView(false);
+		UIManager->OnOffLobbyView(true);
+		PlayerInfo->SetPlayerState(UPlayerInfo::LOBBY);
+		PlayerInfo->SetPacketFlag(UPlayerInfo::ROOM_LIST);
+		return;
+	}
 	if(curState == UPlayerInfo::WAITING)
 	{
 		if (str1.Contains("------") == true)//로그인 성공
@@ -266,7 +284,11 @@ void USocketManager::CheckRecvMsg(FString& recvStr, FString& str1)
 		}
 		else//로그인 실패
 		{
+			if (str1.Contains(TEXT("안녕하세요.")) == true)
+				return;
 			UE_LOG(LogTemp, Log, TEXT("@@@ USocketManager::CheckRecvMsg: 로그인 실패"));
+			UIManager->UpdatePopUp(recvStr);
+			UIManager->OnOffPopUpView(true);
 		}
 	}
 	else if (curState == UPlayerInfo::LOBBY)
@@ -277,7 +299,6 @@ void USocketManager::CheckRecvMsg(FString& recvStr, FString& str1)
 		}
 		else if (curPacketFlag == UPlayerInfo::ROOM_LIST)
 		{
-			UE_LOG(LogTemp, Log, TEXT("~~~~~~~~~~~USocketManager::CheckRecvMsg() } UPlayerInfo::ROOM_LIST %s"), *recvStr);
 			UIManager->UpdateList(recvStr);
 		}
 		else if (curPacketFlag == UPlayerInfo::ROOM_INFO)
@@ -343,6 +364,16 @@ void USocketManager::CheckRecvMsg(FString& recvStr, FString& str1)
 		{
 			UIManager->OnOffRoomView(false);
 			UIManager->OnOffLobbyView(true);
+			PlayerInfo->SetPlayerState(UPlayerInfo::LOBBY);
+			PlayerInfo->SetPacketFlag(UPlayerInfo::ROOM_LIST);
+			return;
+		}
+		else if (curPacketFlag == UPlayerInfo::DEL_WAIT)
+		{
+			UIManager->OnOffRoomView(false);
+			UIManager->OnOffLobbyView(true);
+			UIManager->UpdatePopUp(recvStr);
+			UIManager->OnOffPopUpView(true);
 			PlayerInfo->SetPlayerState(UPlayerInfo::LOBBY);
 			PlayerInfo->SetPacketFlag(UPlayerInfo::ROOM_LIST);
 			return;

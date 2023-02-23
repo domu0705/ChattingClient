@@ -31,6 +31,8 @@ public:
 	UPROPERTY(meta = (BindWidget))
 		UButton* QuitBtn = nullptr;
 	UPROPERTY(meta = (BindWidget))
+		UButton* DelBtn = nullptr;
+	UPROPERTY(meta = (BindWidget))
 		UScrollBox* ChatScrollBox = nullptr;
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 		UEditableTextBox* ChatEditText;
@@ -39,6 +41,8 @@ public:
 		void SendBtnClicked();
 	UFUNCTION()
 		void QuitBtnClicked();
+	UFUNCTION()
+		void DeleteBtnClicked();
 	UFUNCTION()
 		void LoadChat(FString& msg);
 };

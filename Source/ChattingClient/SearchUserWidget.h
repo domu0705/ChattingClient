@@ -10,6 +10,7 @@
 #include "Runtime/UMG/Public/Components/TextBlock.h"
 #include "ChattingClientManager.h"
 #include "SocketManager.h"
+#include "Engine/EngineTypes.h"
 #include "SearchUserWidget.generated.h"
 
 /**
@@ -30,7 +31,7 @@ public:
 	UPROPERTY(meta = (BindWidget))
 		UEditableTextBox* NumEditText;
 	UPROPERTY(meta = (BindWidget))
-		UScrollBox* TitleScrollBox = nullptr;
+		UTextBlock* TitleTextBox = nullptr;
 
 	UFUNCTION()
 		void OKBtnClicked();

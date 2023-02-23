@@ -15,6 +15,10 @@ void URoomUserWidget::NativeConstruct()
 		return;
 	QuitBtn->OnClicked.AddDynamic(this, &URoomUserWidget::QuitBtnClicked);
 
+	if (!DelBtn)
+		return;
+	DelBtn->OnClicked.AddDynamic(this, &URoomUserWidget::DeleteBtnClicked);
+
 }
 
 void URoomUserWidget::SendBtnClicked()
@@ -35,6 +39,17 @@ void URoomUserWidget::QuitBtnClicked()
 
 	UChattingClientManager* manager = UChattingClientManager::GetInstance();
 	manager->GetSocket()->SendQuitRoom();
+	chatLog = TEXT("");
+	ChatEditText->SetText(FText::FromString(""));
+}
+
+//방 삭제 요청 보내기
+void URoomUserWidget::DeleteBtnClicked()
+{
+	UE_LOG(LogTemp, Log, TEXT(" ULobbyUserWidget::DeleteBtnClicked()"));
+
+	UChattingClientManager* manager = UChattingClientManager::GetInstance();
+	manager->GetSocket()->SendDeleteRoom();
 	chatLog = TEXT("");
 	ChatEditText->SetText(FText::FromString(""));
 }

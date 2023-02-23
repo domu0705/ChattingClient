@@ -26,6 +26,16 @@ void UPopUpUserWidget::LoadPopUpMsg(const FString& msg)
 	MsgScrollBox->ClearChildren();
 
 	UTextBlock* NewTextBlock = NewObject<UTextBlock>(MsgScrollBox);
+
+	//UFont* Font = Cast<UFont>(StaticLoadObject(UFont::StaticClass(), nullptr, TEXT("Font'/Game/Resource/netM_.netM_'")));
+
+	//FSlateFontInfo FontInfo;
+	//FontInfo.Size = 25;
+
+	//NewTextBlock->SetFont(FontInfo);
+	//const FTextBlockStyle& CurrentStyle = NewTextBlock->GetDefaultFontName() ;
+
+
 	NewTextBlock->SetText(FText::FromString(msg));
 	MsgScrollBox->AddChild(NewTextBlock);
 }

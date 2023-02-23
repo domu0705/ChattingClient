@@ -31,6 +31,7 @@ public:
         WAIT_ROOM_CREATION,
         WAIT_PRIVATE_MSG,
         QUIT_WAIT,
+        DEL_WAIT,
         LOGOUT_WAIT,
         X,
     };

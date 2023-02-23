@@ -17,6 +17,7 @@ void USearchUserWidget::NativeConstruct()
 	CloseBtn->OnClicked.AddDynamic(this, &USearchUserWidget::CloseBtnClicked);
 }
 
+//입력한 정보에 해당하는 검색 요청
 void USearchUserWidget::OKBtnClicked()
 {
 	UE_LOG(LogTemp, Log, TEXT(" URoomOptionUserWidget::OKBtnClicked()"));
@@ -51,23 +52,16 @@ void USearchUserWidget::OKBtnClicked()
 	CloseBtnClicked();
 }
 
-
 void USearchUserWidget::CloseBtnClicked()
 {
-	UE_LOG(LogTemp, Log, TEXT(" UPopUpUserWidget::CloseBtnClicked()"));
 	UUserWidgetManager* UImanager = UUserWidgetManager::GetInstance();
 	UImanager->OnOffSearchView(title,false);
 	NumEditText->SetText(FText::FromString(""));
 }
 
-// 제목 택스트 업데이트
+// 정보 설명 택스트를 업데이트 함
 void USearchUserWidget::LoadTitleMsg(const FString& msg)
 {
 	title = msg;
-	UE_LOG(LogTemp, Log, TEXT(" !@!@!@!@ ULobbyUserWidget::LoadRoomList ,%s"), *msg);
-	TitleScrollBox->ClearChildren();
-
-	UTextBlock* NewTextBlock = NewObject<UTextBlock>(TitleScrollBox);
-	NewTextBlock->SetText(FText::FromString(msg));
-	TitleScrollBox->AddChild(NewTextBlock);
+	TitleTextBox->SetText(FText::FromString(msg));
 }
