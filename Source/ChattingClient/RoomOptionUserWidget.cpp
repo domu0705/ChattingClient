@@ -3,6 +3,8 @@
 
 #include "RoomOptionUserWidget.h"
 
+
+//버튼 이벤트와 함수 연결
 void URoomOptionUserWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
@@ -18,9 +20,6 @@ void URoomOptionUserWidget::NativeConstruct()
 //유저가 입력한 정보로 방 생성 요청 보내기
 void URoomOptionUserWidget::OKBtnClicked()
 {
-	UE_LOG(LogTemp, Log, TEXT(" URoomOptionUserWidget::OKBtnClicked()"));
-
-
 	FString num = (NumEditText->GetText()).ToString();
 	FString name = (NameEditText->GetText()).ToString();
 
@@ -30,17 +29,14 @@ void URoomOptionUserWidget::OKBtnClicked()
 
 	USocketManager* socketManager = manager->GetSocket();
 	if (!socketManager)
-	{
-		UE_LOG(LogTemp, Log, TEXT("LogInBtnClicked() | !socketmanager fail"));
 		return;
-	}
-
 	socketManager->SendCreateRoom(num, name);
-	UE_LOG(LogTemp, Log, TEXT("@@@LogInBtnClicked::SendLogin success"));
+
 	NameEditText->SetText(FText::FromString(""));
 	NumEditText->SetText(FText::FromString(""));
 }
 
+//방 생성 창 데이터 초기화 및 닫기
 void URoomOptionUserWidget::CloseBtnClicked()
 {
 	UUserWidgetManager* UImanager = UUserWidgetManager::GetInstance();

@@ -6,12 +6,12 @@
 void USearchUserWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
+	
 	title = TEXT("검색할 방 번호:");
 
 	if (!OKBtn)
 		return;
 	OKBtn->OnClicked.AddDynamic(this, &USearchUserWidget::OKBtnClicked);
-
 	if (!CloseBtn)
 		return;
 	CloseBtn->OnClicked.AddDynamic(this, &USearchUserWidget::CloseBtnClicked);
@@ -20,9 +20,6 @@ void USearchUserWidget::NativeConstruct()
 //입력한 정보에 해당하는 검색 요청
 void USearchUserWidget::OKBtnClicked()
 {
-	UE_LOG(LogTemp, Log, TEXT(" URoomOptionUserWidget::OKBtnClicked()"));
-
-
 	FString name = (NumEditText->GetText()).ToString();
 
 	UChattingClientManager* manager = UChattingClientManager::GetInstance();
@@ -31,10 +28,7 @@ void USearchUserWidget::OKBtnClicked()
 
 	USocketManager* socketManager = manager->GetSocket();
 	if (!socketManager)
-	{
-		UE_LOG(LogTemp, Log, TEXT("LogInBtnClicked() | !socketmanager fail"));
 		return;
-	}
 
 	if (title.Contains(TEXT("검색할 방")))//방찾기
 	{
@@ -48,10 +42,11 @@ void USearchUserWidget::OKBtnClicked()
 	{
 		socketManager->SendUserInfo(name);
 	}
-	UE_LOG(LogTemp, Log, TEXT("@@@USearchUserWidget::OKBtnClicked success"));
+
 	CloseBtnClicked();
 }
 
+//정보 검색 창 닫기
 void USearchUserWidget::CloseBtnClicked()
 {
 	UUserWidgetManager* UImanager = UUserWidgetManager::GetInstance();

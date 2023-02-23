@@ -10,9 +10,7 @@
 #include "SocketManager.h"
 #include "PrivateMsgUserWidget.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
 class CHATTINGCLIENT_API UPrivateMsgUserWidget : public UUserWidget
 {
@@ -29,6 +27,7 @@ public:
 		UEditableTextBox* DestEditText;
 	UPROPERTY(meta = (BindWidget))
 		UEditableTextBox* MsgEditText;
+
 	UFUNCTION()
 		void SendBtnClicked();
 	UFUNCTION()

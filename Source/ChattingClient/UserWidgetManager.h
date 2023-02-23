@@ -6,11 +6,9 @@
 #include "Blueprint/UserWidget.h"
 #include "ChattingClientManager.h"
 #include "SocketManager.h"
-
 #include "PlayerInfo.h"
-/**
- * 
- */
+
+
 class ULogInUserWidget;
 class ULobbyUserWidget;
 class URoomOptionUserWidget;
@@ -21,7 +19,24 @@ class USearchUserWidget;
 
 class CHATTINGCLIENT_API UUserWidgetManager
 {
-	//virtual void NativeConstruct() override;
+private:
+	TSubclassOf<UUserWidget> LoginUIClass;
+	TSubclassOf<UUserWidget> LobbyUIClass;
+	TSubclassOf<UUserWidget> RoomOptionUIClass;
+	TSubclassOf<UUserWidget> RoomUIClass;
+	TSubclassOf<UUserWidget>PrivateMsgUIClass;
+	TSubclassOf<UUserWidget>PopUpUIClass;
+	TSubclassOf<UUserWidget>SearchUIClass;
+
+	ULogInUserWidget* LoginUI;
+	ULobbyUserWidget* LobbyUI;
+	URoomOptionUserWidget* RoomOptionUI;
+	URoomUserWidget* RoomUI;
+	UPrivateMsgUserWidget* PrivateMsgUI;
+	UPopUpUserWidget* PopUpUI;
+	USearchUserWidget* SearchUI;
+	UChattingClientManager* manager;
+
 public:
 	static UUserWidgetManager* GetInstance() {
 		static UUserWidgetManager s;
@@ -29,6 +44,7 @@ public:
 	}
 
 	UUserWidgetManager();
+
 	void StartUserWidgetManager();
 	void CreateLogInView(UWorld* world);
 	void CreateLobbyView(UWorld* world);
@@ -48,29 +64,4 @@ public:
 	void UpdateList(const FString& msg);
 	void UpdateChatList(FString& msg);
 	void UpdatePopUp(const FString& msg);
-	//void CreateUserWidgetClass();
-	//virtual void BeginPlay() override; 여기 이거 못씀
-
-private:
-	TSubclassOf<UUserWidget> LoginUIClass;
-	TSubclassOf<UUserWidget> LobbyUIClass;
-	TSubclassOf<UUserWidget> RoomOptionUIClass;
-	TSubclassOf<UUserWidget> RoomUIClass;
-	TSubclassOf<UUserWidget>PrivateMsgUIClass;
-	TSubclassOf<UUserWidget>PopUpUIClass;
-	TSubclassOf<UUserWidget>SearchUIClass;
-
-	ULogInUserWidget* LoginUI;
-	ULobbyUserWidget* LobbyUI;
-	URoomOptionUserWidget* RoomOptionUI;
-	URoomUserWidget* RoomUI;
-	UPrivateMsgUserWidget* PrivateMsgUI;
-	UPopUpUserWidget* PopUpUI;
-	USearchUserWidget* SearchUI;
-
-	UChattingClientManager* manager;
-	//TSharedPtr<UUserWidget> LoginUIObject;
-	//LoginUIObject.IsValid();
-	//UUserWidget* a = LoginUIObject.Get();
-
 };

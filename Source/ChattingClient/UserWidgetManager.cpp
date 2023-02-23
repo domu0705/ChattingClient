@@ -12,25 +12,20 @@
 #include "SearchUserWidget.h"
 #include <UObject/ConstructorHelpers.h>
 
-//UI가 뷰포트에 추가되면(Add to ViewPort) 그 이후에 NativeContruct 함수가 호출
-UUserWidgetManager::UUserWidgetManager()//(const FObjectInitializer& ObjectInitializer): Super(ObjectInitializer)//userwidget은 생성자 호출 이렇게 해야함
+
+UUserWidgetManager::UUserWidgetManager()
 {
 	manager = UChattingClientManager::GetInstance();
-	//static ConstructorHelpers::FClassFinder<UUserWidget> WB_Login(TEXT("/Game/BP_Login"));// 무조건 생성자에서만 호출WidgetBlueprint'/Game/BP_LogIn.BP_LogIn' BP오브젝트
-	//if (WB_Login.Succeeded())
-	//{
-	//	LoginUIClass = WB_Login.Class;
-	//	UE_LOG(LogTemp, Log, TEXT("success @@@@@@@@@@@@@@"));
-	//}
 }
 
 void UUserWidgetManager::StartUserWidgetManager()
 {
-	//CreateUserWidgetClass();
-	//CreateLogInView();
+
 }
 
-//위젯을 viewPort에 올리기
+// --------------------------------------------------------------------------------------
+// 위젯을 viewPort에 올리기
+// --------------------------------------------------------------------------------------
 void UUserWidgetManager::CreateLogInView(UWorld* world)
 {
 	if (!world)
@@ -55,8 +50,6 @@ void UUserWidgetManager::CreateLobbyView(UWorld* world)
 	if (!world)
 		return;
 
-	UE_LOG(LogTemp, Log, TEXT("@@@ CreateLobbyView"));
-
 	FString path = "/Game/BP_Lobby";
 	LobbyUIClass = ConstructorHelpersInternal::FindOrLoadClass(path, ULobbyUserWidget::StaticClass());
 	if (!LobbyUIClass)
@@ -67,7 +60,6 @@ void UUserWidgetManager::CreateLobbyView(UWorld* world)
 	{
 		LobbyUI->AddToViewport();
 		OnOffLobbyView(false);
-		UE_LOG(LogTemp, Log, TEXT("@@@ LobbyUIObject success"));
 	}
 	else
 	{
@@ -80,8 +72,6 @@ void UUserWidgetManager::CreateRoomOptionView(UWorld* world)
 	if (!world)
 		return;
 
-	UE_LOG(LogTemp, Log, TEXT("@@@ CreateRoomOptionView"));
-
 	FString path = "/Game/BP_CreateRoom";
 	RoomOptionUIClass = ConstructorHelpersInternal::FindOrLoadClass(path, URoomOptionUserWidget::StaticClass());
 	if (!RoomOptionUIClass)
@@ -92,7 +82,6 @@ void UUserWidgetManager::CreateRoomOptionView(UWorld* world)
 	{
 		RoomOptionUI->AddToViewport();
 		OnOffRoomOptionView(false);
-		UE_LOG(LogTemp, Log, TEXT("@@@ LobbyUIObject success"));
 	}
 	else
 	{
@@ -105,8 +94,6 @@ void UUserWidgetManager::CreateRoomView(UWorld* world)
 	if (!world)
 		return;
 
-	UE_LOG(LogTemp, Log, TEXT("@@@ CreateRoomView"));
-
 	FString path = "/Game/BP_Room";
 	RoomUIClass = ConstructorHelpersInternal::FindOrLoadClass(path, URoomUserWidget::StaticClass());
 	if (!RoomUIClass)
@@ -117,7 +104,6 @@ void UUserWidgetManager::CreateRoomView(UWorld* world)
 	{
 		RoomUI->AddToViewport();
 		OnOffRoomView(false);
-		UE_LOG(LogTemp, Log, TEXT("@@@ CreateRoomView success"));
 	}
 	else
 	{
@@ -130,8 +116,6 @@ void UUserWidgetManager::CreatePrivateMsgView(UWorld* world)
 	if (!world)
 		return;
 
-	UE_LOG(LogTemp, Log, TEXT("@@@ CreatePrivateMsgView"));
-
 	FString path = "/Game/BP_PrivateMsg";
 
 	PrivateMsgUIClass = ConstructorHelpersInternal::FindOrLoadClass(path, UPrivateMsgUserWidget::StaticClass());
@@ -143,7 +127,6 @@ void UUserWidgetManager::CreatePrivateMsgView(UWorld* world)
 	{
 		PrivateMsgUI->AddToViewport();
 		OnOffPrivateMsgView(false);
-		UE_LOG(LogTemp, Log, TEXT("@@@ CreatePrivateMsgView success"));
 	}
 	else
 	{
@@ -156,8 +139,6 @@ void UUserWidgetManager::CreatePopUpView(UWorld* world)
 	if (!world)
 		return;
 
-	UE_LOG(LogTemp, Log, TEXT("@@@ CreatePopUpView"));
-
 	FString path = "/Game/BP_PopUp";
 	PopUpUIClass = ConstructorHelpersInternal::FindOrLoadClass(path, UPopUpUserWidget::StaticClass());
 	if (!PopUpUIClass)
@@ -168,11 +149,10 @@ void UUserWidgetManager::CreatePopUpView(UWorld* world)
 	{
 		PopUpUI->AddToViewport();
 		OnOffPopUpView(false);
-		UE_LOG(LogTemp, Log, TEXT("@@@ CreateRoomView success"));
 	}
 	else
 	{
-		UE_LOG(LogTemp, Log, TEXT("@@@ CreateRoomView  fail "));
+		UE_LOG(LogTemp, Log, TEXT("CreateRoomView  fail "));
 	}
 }
 
@@ -180,8 +160,6 @@ void UUserWidgetManager::CreateSearchView(UWorld* world)
 {
 	if (!world)
 		return;
-
-	UE_LOG(LogTemp, Log, TEXT("@@@ CreateSearchView"));
 
 	FString path = "/Game/BP_Search";
 	SearchUIClass = ConstructorHelpersInternal::FindOrLoadClass(path, USearchUserWidget::StaticClass());
@@ -194,15 +172,16 @@ void UUserWidgetManager::CreateSearchView(UWorld* world)
 		SearchUI->AddToViewport();
 		FString title = TEXT("검색할 방 번호:");
 		OnOffSearchView(title,false);
-		UE_LOG(LogTemp, Log, TEXT("@@@ CreateSearchView success"));
 	}
 	else
 	{
-		UE_LOG(LogTemp, Log, TEXT("@@@ CreateSearchView  fail "));
+		UE_LOG(LogTemp, Log, TEXT("CreateSearchView  fail "));
 	}
 }
 
-
+// --------------------------------------------------------------------------------------
+// View On Off 관리
+// --------------------------------------------------------------------------------------
 void UUserWidgetManager::OnOffLogInView(bool isVIsible)
 {
 	if (!LoginUI)
@@ -221,14 +200,10 @@ void UUserWidgetManager::OnOffLogInView(bool isVIsible)
 void UUserWidgetManager::OnOffLobbyView(bool isVIsible)
 {
 	if (!LobbyUI) 
-	{
-		UE_LOG(LogTemp, Log, TEXT("@@@ OnOffLobbyView | LobbyUIObject nulllll"));
 		return;
-	}
 
 	if (isVIsible)
 	{
-		UE_LOG(LogTemp, Log, TEXT("@@@ OnOffLobbyView | true"));
 		UPlayerInfo* PlayerInfo = manager->GetPlayerInfo();
 		PlayerInfo->SetPacketFlag(UPlayerInfo::ROOM_LIST);
 
@@ -237,23 +212,17 @@ void UUserWidgetManager::OnOffLobbyView(bool isVIsible)
 	}
 	else
 	{
-		UE_LOG(LogTemp, Log, TEXT("@@@ OnOffLobbyView | false"));
 		LobbyUI->SetVisibility(ESlateVisibility::Collapsed);
 	}
 }
 
 void UUserWidgetManager::OnOffRoomOptionView(bool isVIsible)
 {
-	UE_LOG(LogTemp, Log, TEXT("@@@  UUserWidgetManager::OnOffRoomOptionView()"));
 	if (!RoomOptionUI)
-	{
-		UE_LOG(LogTemp, Log, TEXT("@@@  없음"));
 		return;
-	}
 
 	if (isVIsible)
 	{
-		UE_LOG(LogTemp, Log, TEXT("@@@  UUserWidgetManager::OnOffRoomOptionView() | SetVisibility(ESlateVisibility::Visible)"));
 		RoomOptionUI->SetVisibility(ESlateVisibility::Visible);
 	}
 	else
@@ -264,37 +233,26 @@ void UUserWidgetManager::OnOffRoomOptionView(bool isVIsible)
 
 void UUserWidgetManager::OnOffRoomView(bool isVIsible)
 {
-	UE_LOG(LogTemp, Log, TEXT("@@@  UUserWidgetManager::OnOffRoomView()"));
 	if (!RoomUI)
-	{
-		UE_LOG(LogTemp, Log, TEXT("@@@  없음"));
 		return;
-	}
 
 	if (isVIsible)
 	{
-		UE_LOG(LogTemp, Log, TEXT("@@@  UUserWidgetManager::OnOffRoomView() | SetVisibility(ESlateVisibility::Visible)"));
 		RoomUI->SetVisibility(ESlateVisibility::Visible);
 	}
 	else
 	{
-
 		RoomUI->SetVisibility(ESlateVisibility::Collapsed);
 	}
 }
 
 void UUserWidgetManager::OnOffPrivateMsgView(bool isVIsible)
 {
-	UE_LOG(LogTemp, Log, TEXT("@@@  UUserWidgetManager::OnOffPrivateMsgView()"));
 	if (!PrivateMsgUI)
-	{
-		UE_LOG(LogTemp, Log, TEXT("@@@  없음"));
 		return;
-	}
 
 	if (isVIsible)
 	{
-		UE_LOG(LogTemp, Log, TEXT("@@@  UUserWidgetManager::OnOffPrivateMsgView() | SetVisibility(ESlateVisibility::Visible)"));
 		PrivateMsgUI->SetVisibility(ESlateVisibility::Visible);
 	}
 	else
@@ -305,16 +263,11 @@ void UUserWidgetManager::OnOffPrivateMsgView(bool isVIsible)
 
 void UUserWidgetManager::OnOffPopUpView(bool isVIsible)
 {
-	UE_LOG(LogTemp, Log, TEXT("@@@  UUserWidgetManager::OnOffPopUpView()"));
 	if (!PopUpUI)
-	{
-		UE_LOG(LogTemp, Log, TEXT("@@@  없음"));
 		return;
-	}
 
 	if (isVIsible)
 	{
-		UE_LOG(LogTemp, Log, TEXT("@@@  UUserWidgetManager::PopUpUI() | SetVisibility(ESlateVisibility::Visible)"));
 		PopUpUI->SetVisibility(ESlateVisibility::Visible);
 	}
 	else
@@ -325,16 +278,11 @@ void UUserWidgetManager::OnOffPopUpView(bool isVIsible)
 
 void UUserWidgetManager::OnOffSearchView(FString& type, bool isVIsible)
 {
-	UE_LOG(LogTemp, Log, TEXT("@@@  UUserWidgetManager::OnOffSearchView()"));
 	if (!SearchUI)
-	{
-		UE_LOG(LogTemp, Log, TEXT("@@@  없음"));
 		return;
-	}
 
 	if (isVIsible)
 	{
-		UE_LOG(LogTemp, Log, TEXT("@@@  UUserWidgetManager::OnOffSearchView() | SetVisibility(ESlateVisibility::Visible)"));
 		SearchUI->LoadTitleMsg(type);
 		SearchUI->SetVisibility(ESlateVisibility::Visible);
 	}
@@ -344,24 +292,20 @@ void UUserWidgetManager::OnOffSearchView(FString& type, bool isVIsible)
 	}
 }
 
-//팝업 메세지 갱신
+//팝업창 메세지 갱신
 void  UUserWidgetManager::UpdatePopUp(const FString& msg)
 {
-	UE_LOG(LogTemp, Log, TEXT("@@@ UUserWidgetManager::UpdateRoomList %s"), *msg);
 	PopUpUI->LoadPopUpMsg(msg);
-	//LoadPopUpMsg
 }
 
+//로비 정보창 정보 갱신
 void UUserWidgetManager::UpdateList(const FString& msg)
 {
-	UE_LOG(LogTemp, Log, TEXT("@@@ UUserWidgetManager::UpdateRoomList %s"),*msg);
 	LobbyUI->LoadList(msg);
-	//LobbyUIObject LoadRoomList(msg);
 }
 
+//채팅방 정보 갱신
 void UUserWidgetManager::UpdateChatList(FString& msg)
 {
-	UE_LOG(LogTemp, Log, TEXT("@@@ UUserWidgetManager::UpdateChatList %s"), *msg);
 	RoomUI->LoadChat(msg);
-	//LobbyUIObject LoadRoomList(msg);
 }

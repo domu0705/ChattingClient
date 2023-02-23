@@ -13,9 +13,7 @@
 #include "Engine/EngineTypes.h"
 #include "SearchUserWidget.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
 class CHATTINGCLIENT_API USearchUserWidget : public UUserWidget
 {
@@ -24,6 +22,7 @@ private:
 	FString title;
 public:
 	void NativeConstruct() override;
+
 	UPROPERTY(meta = (BindWidget))
 		UButton* OKBtn = nullptr;
 	UPROPERTY(meta = (BindWidget))

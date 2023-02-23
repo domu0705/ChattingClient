@@ -3,52 +3,40 @@
 #include "LogInUserWidget.h"
 #include "SocketManager.h"
 
-//위젯 클래스의 셍성자
+//버튼이벤트와 함수 연결
 void ULogInUserWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
-	UE_LOG(LogTemp, Log, TEXT("@@ ULogInUserWidget::NativeConstruct()"));
 
 	UserWidgetManager = UUserWidgetManager::GetInstance();
 
-	if (LogInBtn)
-	{
-		LogInBtn->OnClicked.AddDynamic(this, &ULogInUserWidget::LogInBtnClicked);
-		LogInBtn->SetVisibility(ESlateVisibility::Collapsed);
-	}
+	if (!LogInBtn)
+		return;
+	LogInBtn->OnClicked.AddDynamic(this, &ULogInUserWidget::LogInBtnClicked);
+	LogInBtn->SetVisibility(ESlateVisibility::Collapsed);
 
-	if (PortBtn)
-	{
-		PortBtn->OnClicked.AddDynamic(this, &ULogInUserWidget::PortConnBtnClicked);
-	}
+	if (!PortBtn)
+		return;
+	PortBtn->OnClicked.AddDynamic(this, &ULogInUserWidget::PortConnBtnClicked);
 }
 
-void ULogInUserWidget::SetLoginUI()
-{
-	//EditText_LogIn->SetHintText(FText::FromString(L"hihihi!"));/
-
-}
-
+//포트연결 요청
 void ULogInUserWidget::PortConnBtnClicked()
 {
-	//UChattingClientManager* manager = UChattingClientManager::GetInstance();
-	USocketManager* socketManager = USocketManager::GetInstance();//manager->GetSocket();
+	USocketManager* socketManager = USocketManager::GetInstance();
+	if (!socketManager)
+		return;
 
 	if (socketManager->ConnectServer())
 	{
-		UE_LOG(LogTemp, Log, TEXT("@@@PortConnBtnClicked::ConnectServer success"));
-		PortBtn->SetVisibility(ESlateVisibility::Collapsed);//Collapsed  Hidden
+		PortBtn->SetVisibility(ESlateVisibility::Collapsed);
 		LogInBtn->SetVisibility(ESlateVisibility::Visible);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Log, TEXT("@@@PortConnBtnClicked::ConnectServer fail"));
 	}
 }
 
+//로그인 요청
 void ULogInUserWidget::LogInBtnClicked()
 {
-	UE_LOG(LogTemp, Log, TEXT("버튼 시작@@@@@@@@@@@@@@"));
 	FString idStr = (IDEditText->GetText()).ToString();
 	int32 tempCnt = FCString::Atoi(*idStr);
 
@@ -58,18 +46,7 @@ void ULogInUserWidget::LogInBtnClicked()
 
 	USocketManager* socketManager = manager->GetSocket();
 	if (!socketManager)
-	{
-		UE_LOG(LogTemp, Log, TEXT("LogInBtnClicked() | !socketmanager fail"));
 		return;
-	}
-	
-	if (socketManager)
-	{
-		socketManager->SendLogin(idStr);
-		UE_LOG(LogTemp, Log, TEXT("@@@LogInBtnClicked::SendLogin success"));
-	}
-	else
-	{
-		UE_LOG(LogTemp, Log, TEXT("@@@LogInBtnClicked::SendLogin fail"));
-	}
+
+	socketManager->SendLogin(idStr);
 }

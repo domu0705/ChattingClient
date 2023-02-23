@@ -11,10 +11,8 @@
 #include "Networking.h"
 #include "Sockets.h"
 #include "SocketSubsystem.h"
-#include <locale.h>//for setlocale
-/**
- * 
- */
+#include <locale.h>
+
 
 class CHATTINGCLIENT_API USocketManager
 {
@@ -26,7 +24,6 @@ class CHATTINGCLIENT_API USocketManager
 
 private:
 	FSocket* socket;
-	//int32 port;
 	uint8 buffer[BUFFER_SIZE] = { 0 };
 	int recvBytes = 0;
 public:
@@ -36,6 +33,7 @@ public:
 	}
 
 	bool isConnected;
+
 	USocketManager();
 	~USocketManager();
 
@@ -55,6 +53,4 @@ public:
 	void SendRoomInfo(const FString& num);
 	void SendUserInfo(const FString& name);
 	void CheckRecvMsg(FString& recvStr, FString& str1);
-	int WideCharToMBT(char* from, wchar_t* to);
-
 };

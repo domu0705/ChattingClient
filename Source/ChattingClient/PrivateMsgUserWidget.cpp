@@ -3,6 +3,7 @@
 
 #include "PrivateMsgUserWidget.h"
 
+//버튼 이벤트와 함수 연결
 void UPrivateMsgUserWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
@@ -16,11 +17,9 @@ void UPrivateMsgUserWidget::NativeConstruct()
 	CloseBtn->OnClicked.AddDynamic(this, &UPrivateMsgUserWidget::CloseBtnClicked);
 }
 
+// 쪽지 전송 요청
 void UPrivateMsgUserWidget::SendBtnClicked()
 {
-	UE_LOG(LogTemp, Log, TEXT(" UPrivateMsgUserWidget::SendBtnClicked()"));
-
-
 	FString dest = (DestEditText->GetText()).ToString();
 	FString msg = (MsgEditText->GetText()).ToString();
 
@@ -30,18 +29,15 @@ void UPrivateMsgUserWidget::SendBtnClicked()
 
 	USocketManager* socketManager = manager->GetSocket();
 	if (!socketManager)
-	{
-		UE_LOG(LogTemp, Log, TEXT("UPrivateMsgUserWidget::SendBtnClicked() | !socketmanager fail"));
 		return;
-	}
 
 	socketManager->SendPrivateMsg(dest, msg);
 	CloseBtnClicked();
 }
 
+//쪽지 전송 창 닫기
 void UPrivateMsgUserWidget::CloseBtnClicked()
 {
-	UE_LOG(LogTemp, Log, TEXT(" UPrivateMsgUserWidget::CloseBtnClicked()"));
 	UUserWidgetManager* UImanager = UUserWidgetManager::GetInstance();
 	UImanager->OnOffPrivateMsgView(false);
 }

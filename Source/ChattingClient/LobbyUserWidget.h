@@ -10,13 +10,10 @@
 #include "Runtime/UMG/Public/Components/TextBlock.h"
 #include "ChattingClientManager.h"
 #include "SocketManager.h"
-//#include "GenericPlatform/GenericPlatformMisc.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "LobbyUserWidget.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
 class CHATTINGCLIENT_API ULobbyUserWidget : public UUserWidget
 {
@@ -43,7 +40,6 @@ public:
 	UPROPERTY(meta = (BindWidget))
 		UScrollBox* ListScrollBox = nullptr;
 
-
 	UFUNCTION()
 		void RoomListBtnClicked();
 	UFUNCTION()
@@ -58,7 +54,6 @@ public:
 		void UserInfoBtnClicked();
 	UFUNCTION()
 		void JoinRoomBtnClicked();
-
 	UFUNCTION()
 		void LoadList(const FString& msg);
 	UFUNCTION()

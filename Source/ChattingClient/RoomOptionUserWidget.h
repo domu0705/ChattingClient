@@ -10,9 +10,7 @@
 #include "SocketManager.h"
 #include "RoomOptionUserWidget.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
 class CHATTINGCLIENT_API URoomOptionUserWidget : public UUserWidget
 {

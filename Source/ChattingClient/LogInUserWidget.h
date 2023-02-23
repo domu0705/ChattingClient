@@ -10,9 +10,7 @@
 #include "UserWidgetManager.h"
 #include "LogInUserWidget.generated.h"
 
-/**
- *
- */
+
 UCLASS()
 class CHATTINGCLIENT_API ULogInUserWidget : public UUserWidget
 {
@@ -31,10 +29,7 @@ public:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 		UEditableTextBox* IDEditText;
 
-	void SetLoginUI();
-
 protected:
-
 	UFUNCTION()
 		void LogInBtnClicked(); 
 	UFUNCTION()

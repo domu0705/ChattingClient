@@ -4,20 +4,18 @@
 
 #include "CoreMinimal.h"
 
-/**
- * 
- */
+
 class CHATTINGCLIENT_API UPlayerInfo
 {
 public:
-    enum State
+    enum State //유저 상태 
     {
         WAITING,
         LOBBY,
         ROOM,
         LOGOUT
     };
-    enum Packet// 쪽지 따로 처리
+    enum Packet// 요청한 패킷 상태
     {
         NON,
         USER_LIST,
@@ -25,7 +23,7 @@ public:
         ROOM_INFO,
         WAIT_JOIN,
         USER_INFO,
-        SEND_NOTE,//쪽지 보내기
+        SEND_NOTE,
         CREATE_ROOM,
         JOIN_ROOM,
         WAIT_ROOM_CREATION,
@@ -37,9 +35,9 @@ public:
     };
 
 private:
-	//TMap<int32, bool>* packetFlag;
 	int packetFlag;
 	int playerState;
+
 public:
     static UPlayerInfo* GetInstance() {
         static UPlayerInfo s;
@@ -48,85 +46,13 @@ public:
 
 	UPlayerInfo();
 	~UPlayerInfo();
-    void ResetInfo();
-	//TMap<int32, bool>* GetPacketFlag();
+
 	int GetPacketFlag();
     void SetPacketFlag(int newFlag);
     int GetPlayerState();
     void SetPlayerState(int newState);
 
+    void ResetInfo();
+
 
 };
-
-/*
-class MyClass
-{
-public:
-    enum MyEnum
-    {
-        Value1,
-        Value2,
-        Value3
-    };
-};
-
-// Use the enum in AnotherClass
-class AnotherClass
-{
-public:
-    void MyFunction(MyClass::MyEnum value)
-    {
-        // Use the enum value
-        if (value == MyClass::Value1)
-        {
-            // Do something
-        }
-        else if (value == MyClass::Value2)
-        {
-            // Do something else
-        }
-        else if (value == MyClass::Value3)
-        {
-            // Do yet another thing
-        }
-    }
-};
-*/
-/*
-class MyClass
-{
-public:
-    enum class MyEnum
-    {
-        Value1,
-        Value2,
-        Value3
-    };
-
-    void MyFunction(MyEnum value)
-    {
-        // Use the enum value
-        if (value == MyEnum::Value1)
-        {
-            // Do something
-        }
-        else if (value == MyEnum::Value2)
-        {
-            // Do something else
-        }
-        else if (value == MyEnum::Value3)
-        {
-            // Do yet another thing
-        }
-    }
-};
-
-int main()
-{
-    MyClass myObject;
-    myObject.MyFunction(MyClass::MyEnum::Value1);
-    myObject.MyFunction(MyClass::MyEnum::Value2);
-    myObject.MyFunction(MyClass::MyEnum::Value3);
-    return 0;
-}
-*/

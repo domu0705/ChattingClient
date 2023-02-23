@@ -12,9 +12,7 @@
 #include "SocketManager.h"
 #include "PopUpUserWidget.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
 class CHATTINGCLIENT_API UPopUpUserWidget : public UUserWidget
 {

@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "LobbyUserWidget.h"
+
 
 void ULobbyUserWidget::NativeConstruct()
 {
@@ -10,30 +10,24 @@ void ULobbyUserWidget::NativeConstruct()
 	if (!RoomListBtn)
 		return;
 	RoomListBtn->OnClicked.AddDynamic(this, &ULobbyUserWidget::RoomListBtnClicked);
-
 	if (!UserListBtn)
 		return;
 	UserListBtn->OnClicked.AddDynamic(this, &ULobbyUserWidget::UserListBtnClicked);
-
 	if (!CreateRoomBtn)
 		return;
 	CreateRoomBtn->OnClicked.AddDynamic(this, &ULobbyUserWidget::CreateRoomBtnClicked);
 	if (!JoinRoomBtn)
 		return;
 	JoinRoomBtn->OnClicked.AddDynamic(this, &ULobbyUserWidget::JoinRoomBtnClicked);
-
-
 	if (!RoomInfoBtn)
 		return;
 	RoomInfoBtn->OnClicked.AddDynamic(this, &ULobbyUserWidget::RoomInfoBtnClicked);
 	if (!UserInfoBtn)
 		return;
 	UserInfoBtn->OnClicked.AddDynamic(this, &ULobbyUserWidget::UserInfoBtnClicked);
-
 	if (!PrivateMsgBtn)
 		return;
 	PrivateMsgBtn->OnClicked.AddDynamic(this, &ULobbyUserWidget::PrivateMsgBtnClicked);
-
 	if (!QuitBtn)
 		return;
 	QuitBtn->OnClicked.AddDynamic(this, &ULobbyUserWidget::QuitBtnClicked);
@@ -53,13 +47,14 @@ void ULobbyUserWidget::UserListBtnClicked()
 	manager->GetSocket()->SendUserList();
 }
 
-//방 생성 팝업 요청
+//방 생성 팝업 보여주기
 void ULobbyUserWidget::CreateRoomBtnClicked()
 {
 	UUserWidgetManager* UImanager = UUserWidgetManager::GetInstance();
 	UImanager->OnOffRoomOptionView(true);
 }
 
+//방 참여 팝업 보여주기
 void ULobbyUserWidget::JoinRoomBtnClicked()
 {
 	UUserWidgetManager* UImanager = UUserWidgetManager::GetInstance();
@@ -67,7 +62,7 @@ void ULobbyUserWidget::JoinRoomBtnClicked()
 	UImanager->OnOffSearchView(text, true);
 }
 
-//방 검색창 보여주기
+//방 검색 팝업보여주기
 void ULobbyUserWidget::RoomInfoBtnClicked()
 {
 	UUserWidgetManager* UImanager = UUserWidgetManager::GetInstance();
@@ -93,8 +88,6 @@ void ULobbyUserWidget::PrivateMsgBtnClicked()
 //로비 나가기
 void ULobbyUserWidget::QuitBtnClicked()
 {
-	UE_LOG(LogTemp, Log, TEXT(" ULobbyUserWidget::QuitBtnClicked()"));
-
 	UChattingClientManager* manager = UChattingClientManager::GetInstance();
 	manager->GetSocket()->SendQuitSystem();
 	UKismetSystemLibrary::QuitGame(this, 0, EQuitPreference::Quit, false);
@@ -103,7 +96,6 @@ void ULobbyUserWidget::QuitBtnClicked()
 //방 리스트 정보 텍스트 갱신
 void ULobbyUserWidget::LoadList(const FString& msg)
 {
-	UE_LOG(LogTemp, Log, TEXT(" !@!@!@!@ ULobbyUserWidget::LoadRoomList ,%s"),*msg);
 	ListScrollBox->ClearChildren();
 
 	UTextBlock* NewTextBlock = NewObject<UTextBlock>(ListScrollBox);
