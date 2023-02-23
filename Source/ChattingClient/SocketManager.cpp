@@ -218,12 +218,14 @@ void USocketManager::Tick()
 			recvStr.ParseIntoArray(lines, TEXT("\r\n"));
 			if (lines.Num() > 0)
 			{
-				CheckRecvMsg(recvStr ,lines[0]);
-				for (const FString& line : lines)
+				if (recvStr.Contains(TEXT("명령어안내")) == true)
 				{
-					
-					//UE_LOG(LogTemp, Log, TEXT("@@one line : %s"), *line);
+					TArray<FString> parsedStr;
+
+					recvStr.ParseIntoArray(parsedStr, TEXT("명령어안내"));
+					recvStr = parsedStr[0];
 				}
+				CheckRecvMsg(recvStr ,lines[0]);
 			}
 		}
 		
